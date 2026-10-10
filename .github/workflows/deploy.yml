@@ -13,7 +13,7 @@ jobs:
           server: p3plzcpnl489523.prod.phx3.secureserver.net   # host FTP (no es secreto)
           username: deploy@digicyus.com   # usuario FTP (no es secreto); la contraseña sigue en FTP_PASSWORD
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /fincalalolita.digicyus.com/
+          server-dir: ${{ secrets.FTP_SERVER_DIR || '/fincalalolita.digicyus.com/' }}
           exclude: |
             **/.git*
             **/.git*/**
