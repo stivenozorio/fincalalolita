@@ -5,7 +5,8 @@
    - Carga progresiva: primero fotogramas espaciados (ya se puede navegar), luego se rellenan.
    - Mezcla suave entre fotogramas vecinos, salvo en los cortes duros del material original.
    - Un solo bucle rAF activo solo mientras hay scroll o suavizado pendiente.
-   - Sin WebP/errores/ahorro de datos → fotos fijas de las 5 escenas. prefers-reduced-motion → póster estático. */
+   - Sin WebP/errores/ahorro de datos → fotos fijas de las 5 escenas. El scroll siempre mueve el video: es movimiento que controla la persona, no uno automático
+   (con "Reducir movimiento" solo se apagan las animaciones que corren solas). */
 (function () {
   "use strict";
   var N = 250, FPS = 10, DIR = "assets/frames/";
@@ -164,7 +165,6 @@
     }
 
     function start() {
-      if (mqReduce.matches) { setMode("static"); unlisten(); paint(0); hero.classList.add("is-ready"); return; }
       if (conn.saveData === true || (conn.effectiveType && /(^|-)2g$/.test(conn.effectiveType)) || !ctx) {
         setMode("stills"); listen(); hero.classList.add("is-ready"); request(); return;
       }
@@ -177,8 +177,6 @@
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(function (e) { inView = e[0].isIntersecting; if (inView) request(); }, { rootMargin: "100px 0px" }).observe(hero);
     }
-    var onMq = function () { start(); };
-    if (mqReduce.addEventListener) mqReduce.addEventListener("change", onMq); else if (mqReduce.addListener) mqReduce.addListener(onMq);
     window.LolitaHero = { destroy: unlisten };
     start();
   }

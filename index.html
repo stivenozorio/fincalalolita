@@ -132,23 +132,29 @@
 
   <!-- 3 · HISTORIA -->
   <section class="sec sec--dark story" id="story">
+    <p class="ghost" aria-hidden="true" data-parallax="-0.12">Familia</p>
     <div class="wrap story__grid">
-      <figure class="story__img story__img--a egg reveal"><img src="assets/img/scene-3.jpg" alt="" loading="lazy" width="1000" height="563"></figure>
+      <figure class="story__img story__img--a egg reveal" data-parallax="0.06"><img src="assets/img/scene-3.jpg" alt="" loading="lazy" width="1000" height="563"></figure>
       <div class="story__text">
         <p class="eyebrow reveal">Nuestra historia</p>
         <h2 class="h2 h2--xl reveal">Un sueño con raíces familiares.</h2>
-        <p class="body reveal">Finca La Lolita nació del sueño de Dagoberto de crear una finca para sus padres, Efraín y Lucila. Hoy, ese sueño se está convirtiendo en un negocio familiar hecho con cuidado, propósito y la ambición de crecer por generaciones.</p>
+        <p class="body body--words" data-words>Finca La Lolita nació del sueño de Dagoberto de crear una finca para sus padres, Efraín y Lucila. Hoy, ese sueño se está convirtiendo en un negocio familiar hecho con cuidado, propósito y la ambición de crecer por generaciones.</p>
         <p class="sign reveal">Efraín <i>&amp;</i> Lucila</p>
       </div>
-      <figure class="story__img story__img--b egg reveal"><img src="assets/img/scene-1.jpg" alt="" loading="lazy" width="1000" height="563"></figure>
+      <figure class="story__img story__img--b egg reveal" data-parallax="-0.1"><img src="assets/img/scene-1.jpg" alt="" loading="lazy" width="1000" height="563"></figure>
     </div>
   </section>
+
+  <div class="walk" data-walk aria-hidden="true"><div class="hen hen--walk" data-hen></div></div>
 
   <!-- 4 · PRODUCTOS -->
   <section class="sec sec--light edge" id="products">
     <div class="wrap">
       <p class="eyebrow eyebrow--dark reveal">Productos</p>
       <h2 class="h2 h2--dark reveal">Opciones frescas, hechas simples.</h2>
+      <ul class="perks reveal">
+        <li>Pedido directo por WhatsApp</li><li>Precios en pesos colombianos</li><li>Confirmas con Dagoberto</li>
+      </ul>
       <div class="notice" id="previewBanner" hidden></div>
       <div class="catalog" id="catalog" aria-live="polite"></div>
       <div class="catalog-empty" id="catalogEmpty" hidden>
@@ -199,7 +205,7 @@
       <div>
         <p class="eyebrow reveal">Cuidado</p>
         <h2 class="h2 reveal">Cuidado en cada pedido.</h2>
-        <p class="body reveal">Creemos que un producto sencillo merece atención al detalle. Eso empieza por cómo se recibe, confirma y entrega cada pedido.</p>
+        <p class="body body--words" data-words>Creemos que un producto sencillo merece atención al detalle. Eso empieza por cómo se recibe, confirma y entrega cada pedido.</p>
       </div>
       <ul class="care__list">
         <li class="reveal"><h3>Una persona, no un formulario</h3><p>Cada pedido se confirma directamente con Dagoberto por WhatsApp.</p></li>
@@ -216,9 +222,9 @@
       <h2 class="h2 h2--dark reveal">Más que una compra. Una comunidad que crece.</h2>
       <p class="body body--dark reveal">Finca La Lolita crece con sus vecinos. Con el tiempo queremos recordar a nuestros clientes, agradecer a quienes regresan y facilitar volver a pedir.</p>
       <ul class="soon">
-        <li class="reveal"><span>Próximamente</span><h3>Recordatorios para volver a pedir</h3></li>
-        <li class="reveal"><span>Próximamente</span><h3>Recompensas para clientes fieles</h3></li>
-        <li class="reveal"><span>Próximamente</span><h3>Referidos entre vecinos</h3></li>
+        <li class="reveal"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4c-5 0-8 4-8 9v5l-3 4h22l-3-4v-5c0-5-3-9-8-9zM13 26a3 3 0 0 0 6 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Próximamente</span><h3>Recordatorios para volver a pedir</h3></li>
+        <li class="reveal"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4l3.6 7.6 8.4 1-6.2 5.7 1.7 8.3L16 22.400 8.500 26.600l1.700-8.300L4 12.600l8.400-1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Próximamente</span><h3>Recompensas para clientes fieles</h3></li>
+        <li class="reveal"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="22" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 26c0-5 3.500-8 8-8s8 3 8 8M17 20c1.500-1.200 3-2 5-2 4.500 0 7 3 7 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>Próximamente</span><h3>Referidos entre vecinos</h3></li>
       </ul>
       <p class="fine">Solo guardaremos información de clientes con tu permiso y la usaremos únicamente para lo que te informemos.</p>
     </div>
@@ -227,6 +233,7 @@
   <!-- 8 · LLAMADA A LA ACCIÓN -->
   <section class="sec sec--dark cta" id="cta">
     <div class="cta__glow" aria-hidden="true"></div>
+    <div class="cta__sun" data-rise aria-hidden="true"></div>
     <div class="wrap cta__in">
       <h2 class="h2 h2--xl reveal">Lleva una historia familiar a tu mesa.</h2>
       <a class="btn btn--gold reveal" href="#products">Ver los productos</a>
@@ -239,9 +246,16 @@
 </main>
 
 <footer class="footer">
+  <p class="footer__mark" aria-hidden="true">Finca La Lolita</p>
   <div class="wrap footer__in">
-    <div><b>Finca La Lolita</b><p>Un sueño familiar que crece un día a la vez.</p></div>
-    <p class="footer__fine">© <span id="year"></span> Finca La Lolita · <span>Sitio web por</span> DigiCy</p>
+    <div class="footer__brand"><b>Finca La Lolita</b><p>Un sueño familiar que crece un día a la vez.</p></div>
+    <nav class="footer__nav" aria-label="Pie de página">
+      <a href="#story">Historia</a><a href="#products">Productos</a><a href="#how">Cómo pedir</a><a href="#care">Cuidado</a><a href="#community">Comunidad</a>
+    </nav>
+    <div class="footer__contact">
+      <a class="btn btn--gold js-wa" href="#" target="_blank" rel="noopener noreferrer" hidden>Escríbenos por WhatsApp</a>
+      <p class="footer__fine">© <span id="year"></span> Finca La Lolita · Sitio web por DigiCy</p>
+    </div>
   </div>
 </footer>
 
@@ -270,5 +284,6 @@
 <script src="js/scroll-frames.js"></script>
 <script src="js/main.js"></script>
 <script src="js/chat.js"></script>
+<script src="js/scrollfx.js"></script>
 </body>
 </html>

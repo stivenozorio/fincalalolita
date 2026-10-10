@@ -102,20 +102,15 @@ ul, ol { list-style: none; }
 @media (orientation: portrait) {
   .hero { height: 440vh; }
   .hero__stage { background: var(--ink); }
-  .hero__stage > * { top: 11vh; top: 11svh; height: auto; aspect-ratio: 4 / 3; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+  .hero__stage > * { top: 7vh; top: 7svh; height: auto; aspect-ratio: 4 / 5; -webkit-mask-image: linear-gradient(180deg, transparent, #000 10%, #000 86%, transparent); mask-image: linear-gradient(180deg, transparent, #000 10%, #000 86%, transparent); }
   .hero__scenes img { height: 100%; width: 100%; }
-  .hero__shade { background: linear-gradient(180deg, rgba(43, 29, 20, .5) 0, transparent 20%, transparent 54%, var(--ink) 72%); }
+  .hero__shade { background: linear-gradient(180deg, rgba(43, 29, 20, .5) 0, transparent 18%, transparent 56%, var(--ink) 74%); }
   .hero__intro { bottom: clamp(60px, 9vh, 96px); }
   .hero__chapters { bottom: 138px; height: 9rem; }
   .hero__end { left: var(--gutter); right: var(--gutter); bottom: 40px; }
   .hero__intro .btn { width: 100%; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .hero, .farm { height: auto; }
-  .hero__sticky, .farm__sticky { position: relative; height: 100vh; height: 100svh; }
-  .hero__chapters, .hero__end, .hero__hint, .hero__progress, .hero__loading, .motes { display: none; }
-  html { scroll-behavior: auto; }
-}
+@media (prefers-reduced-motion: reduce) { .motes { display: none; } html { scroll-behavior: auto; } }
 .hero[data-mode="static"] { height: auto; }
 .hero[data-mode="static"] .hero__sticky { position: relative; height: 100vh; height: 100svh; }
 .hero[data-mode="static"] .hero__chapters, .hero[data-mode="static"] .hero__end, .hero[data-mode="static"] .hero__hint, .hero[data-mode="static"] .hero__progress { display: none; }
@@ -289,14 +284,7 @@ ul, ol { list-style: none; }
 /* Textura de grano sutil sobre toda la página */
 body::after { content: ""; position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 90; pointer-events: none; opacity: .06; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>"); }
 
-/* Movimiento reducido: se declara al final para ganar la cascada sobre .farm */
-@media (prefers-reduced-motion: reduce) {
-  .farm { height: auto; }
-  .farm__sticky { position: relative; height: 100vh; height: 100svh; }
-  .farm__lines .h2 { transition: none; }
-  .farm__lines .h2:first-child { opacity: 1; transform: none; }
-  .motes { display: none; }
-}
+
 
 /* ===== Asistente flotante (gallina) ===== */
 .chat { position: fixed; right: max(14px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom)); z-index: 70; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; transition: bottom .3s var(--ease); }
@@ -320,3 +308,68 @@ body::after { content: ""; position: fixed; top: 0; right: 0; bottom: 0; left: 0
 .chip { min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-light); background: #fff; color: var(--ink); font: 500 .82rem var(--sans); cursor: pointer; touch-action: manipulation; }
 .chip:hover { background: var(--cream); }
 @media (prefers-reduced-motion: reduce) { .chat__tease { animation: none; } .chat__hen .hen__head { animation: none; } .chat, .chat__fab { transition: none; } }
+
+/* ===== Riqueza visual: secciones después del inicio ===== */
+.hero h1 .wd { display: inline-block; opacity: 0; transform: translateY(.55em); animation: wdIn 1s var(--ease) forwards; }
+@keyframes wdIn { to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .hero h1 .wd { animation: none; opacity: 1; transform: none; } }
+.eyebrow::after { content: ""; display: block; width: 44px; height: 1px; margin-top: .9rem; background: currentColor; opacity: .55; }
+
+/* Historia: texto fantasma + palabras que se iluminan */
+.story { position: relative; overflow: hidden; }
+.story .wrap { position: relative; z-index: 1; }
+.ghost { position: absolute; left: 0; right: 0; top: 6%; text-align: center; margin: 0; font: italic 300 clamp(7rem, 28vw, 26rem)/1 var(--serif); color: transparent; -webkit-text-stroke: 1px rgba(230, 185, 79, .18); white-space: nowrap; pointer-events: none; user-select: none; }
+.body--words .wl { color: rgba(247, 240, 226, .2); transition: color .4s; }
+.body--words .wl.on { color: var(--cream); }
+@media (prefers-reduced-motion: reduce) { .body--words .wl { color: var(--cream); transition: none; } }
+
+/* Gallina que camina entre secciones */
+.walk { position: relative; height: clamp(96px, 15vw, 150px); background: var(--ink); overflow: hidden; z-index: 2; }
+.walk::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 100%; background: radial-gradient(60% 90% at 50% 100%, rgba(230, 185, 79, .22), transparent 70%); }
+.hen--walk { left: 0; bottom: -4px; width: clamp(78px, 11vw, 130px); will-change: translate; }
+
+/* Productos: más atmósfera */
+#products { overflow: hidden; background: radial-gradient(70% 55% at 88% 0%, rgba(230, 185, 79, .2), transparent 62%), radial-gradient(55% 45% at 0% 100%, rgba(117, 69, 43, .1), transparent 62%), var(--paper); }
+#products::after { content: ""; position: absolute; right: -7%; top: 10%; width: 36vw; max-width: 460px; aspect-ratio: 3 / 4; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; border: 1px solid rgba(117, 69, 43, .14); pointer-events: none; }
+#products .wrap { position: relative; z-index: 1; }
+.perks { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.6rem; }
+.perks li { padding: .55rem 1.05rem; border-radius: 999px; background: #fff; border: 1px solid var(--line-light); font: 500 .82rem var(--sans); color: var(--earth); }
+.perks li::before { content: "✦"; margin-right: .55em; color: var(--gold); }
+.prod { border-radius: 20px; transition: transform .45s var(--ease), box-shadow .45s var(--ease); }
+.prod:hover { transform: translateY(-6px); box-shadow: 0 28px 60px rgba(43, 29, 20, .16); }
+.prod__media svg { width: 76px; opacity: .6; filter: drop-shadow(0 8px 14px rgba(117, 69, 43, .25)); }
+.catalog-empty { background: linear-gradient(160deg, var(--cream), #f1e3c4); border-style: solid; }
+
+/* Cómo pedir: cronología que se llena con el scroll */
+.steps { --fill: 0; position: relative; padding-left: 2.4rem; gap: 2.4rem; }
+.steps::before, .steps::after { content: ""; position: absolute; left: .55rem; top: .4rem; bottom: .4rem; width: 2px; }
+.steps::before { background: rgba(43, 29, 20, .12); }
+.steps::after { background: linear-gradient(var(--gold), var(--earth)); transform-origin: top; transform: scaleY(var(--fill)); }
+.steps li { border-top: 0; padding-top: 0; position: relative; }
+.steps li::before { content: ""; position: absolute; left: -2.25rem; top: .9rem; width: .95rem; height: .95rem; border-radius: 50%; background: var(--cream); border: 2px solid var(--gold); box-shadow: 0 0 0 5px rgba(230, 185, 79, .18); }
+.steps li:nth-child(2) { transition-delay: .08s; } .steps li:nth-child(3) { transition-delay: .16s; } .steps li:nth-child(4) { transition-delay: .24s; }
+@media (min-width: 800px) {
+  .steps { padding-left: 0; padding-top: 2.4rem; }
+  .steps::before, .steps::after { left: 0; right: 0; top: .45rem; bottom: auto; width: auto; height: 2px; }
+  .steps::after { transform-origin: left; transform: scaleX(var(--fill)); }
+  .steps li::before { left: 0; top: -2.4rem; }
+}
+
+/* Cuidado y comunidad */
+.care::before { content: ""; position: absolute; left: -10%; top: -20%; width: 60%; height: 90%; background: radial-gradient(closest-side, rgba(230, 185, 79, .12), transparent); pointer-events: none; }
+.care .wrap { position: relative; z-index: 1; }
+.soon li { transition: transform .45s var(--ease), box-shadow .45s var(--ease); }
+.soon li:hover { transform: translateY(-5px); box-shadow: 0 22px 50px rgba(43, 29, 20, .12); }
+.soon svg { width: 36px; height: 36px; color: var(--earth); margin-bottom: 1rem; display: block; }
+
+/* Cierre: sol que sale + corral */
+.cta__sun { position: absolute; left: 50%; bottom: 0; width: min(90vw, 820px); aspect-ratio: 1; translate: -50% calc(58% - var(--rise, 0) * 34%); border-radius: 50%; background: radial-gradient(circle, #fff3c9 0 7%, #ffd36b 20%, rgba(255, 170, 70, .5) 42%, transparent 66%); opacity: calc(.25 + var(--rise, 0) * .75); mix-blend-mode: screen; pointer-events: none; }
+
+/* Pie de página */
+.footer { position: relative; overflow: hidden; background: #140b06; padding: 4.5rem 0 calc(3rem + 70px); border-top: 0; }
+.footer .footer__mark { margin: 0 0 3rem; text-align: center; white-space: nowrap; font: italic 300 clamp(3.2rem, 14.5vw, 13rem)/1 var(--serif); color: transparent; -webkit-text-stroke: 1px rgba(247, 240, 226, .18); user-select: none; }
+.footer__in { display: grid; grid-template-columns: 1fr; gap: 2.2rem; }
+.footer__nav { display: flex; flex-direction: column; gap: .7rem; }
+.footer__nav a { color: var(--ink-soft); text-decoration: none; transition: color .2s; } .footer__nav a:hover { color: var(--gold); }
+.footer__contact { display: flex; flex-direction: column; gap: 1.2rem; align-items: flex-start; }
+@media (min-width: 800px) { .footer__in { grid-template-columns: 1.3fr 1fr 1fr; align-items: start; } }

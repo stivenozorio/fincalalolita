@@ -17,6 +17,8 @@
   function navState() { nav.classList.toggle("is-solid", heroEl.getBoundingClientRect().bottom < window.innerHeight * 0.6); }
   window.addEventListener("scroll", navState, { passive: true }); navState();
   $("year").textContent = new Date().getFullYear();
+  var waNum = O.normalizeNumber(CFG.whatsappNumber);
+  document.querySelectorAll(".js-wa").forEach(function (a) { if (waNum) { a.href = "https://wa.me/" + waNum; a.hidden = false; } });
 
   /* ---------- Revelados reversibles ---------- */
   var els = document.querySelectorAll(".reveal");

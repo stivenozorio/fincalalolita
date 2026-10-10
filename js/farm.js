@@ -52,7 +52,6 @@
       ticking = false;
       var r = farm.getBoundingClientRect(), span = farm.offsetHeight - window.innerHeight;
       var p = span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 1;
-      if (reduce) p = 0.7;
       if (Math.abs(p - last) > 0.0006) { last = p; farm.style.setProperty("--p", p.toFixed(4)); }
       var li = p < 0.34 ? 0 : p < 0.67 ? 1 : 2;
       if (li !== lastLine) { lastLine = li; for (var i = 0; i < lines.length; i++) lines[i].classList.toggle("is-on", i === li); }
