@@ -1,6 +1,6 @@
 # Despliegue MANUAL de Finca La Lolita a https://fincalalolita.digicyus.com
 # Sube por FTPS explícito con lftp (misma técnica que el despliegue del sitio DigiCy).
-# Secretos usados: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD y, opcional, FTP_SERVER_DIR.
+# Secretos usados: FTP_SERVER, FTP_USERNAME y FTP_PASSWORD. El destino es fijo (no hay secreto de directorio).
 name: Deploy (manual)
 on:
   workflow_dispatch: {}
@@ -31,10 +31,12 @@ jobs:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
         run: |
           set -euo pipefail
-          DEST="${FTP_SERVER_DIR:-/fincalalolita.digicyus.com/}"
+          # Destino FIJO a propósito: con la cuenta deploy@ la raíz FTP es public_html (digicyus.com).
+          # No se lee de ningún secreto para que un valor equivocado nunca pueda pisar otro sitio.
+          DEST="fincalalolita.digicyus.com/"
+          case "$DEST" in ""|"/"|"."|"./") echo "::error::destino inseguro"; exit 1;; esac
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
           for attempt in 1 2 3; do
             if lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" \
