@@ -50,8 +50,11 @@ ul, ol { list-style: none; }
 .btn:disabled { background: rgba(43, 29, 20, .18); color: rgba(43, 29, 20, .5); cursor: not-allowed; }
 
 /* ===== Navegación ===== */
-.nav { position: fixed; inset: 0 0 auto 0; z-index: 50; display: flex; align-items: center; gap: 1rem; padding: calc(14px + env(safe-area-inset-top)) var(--gutter) 14px; transition: background .35s, backdrop-filter .35s; }
-.nav.is-solid, .nav.is-open { background: rgba(43, 29, 20, .88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; gap: 1rem; padding: calc(14px + env(safe-area-inset-top)) var(--gutter) 14px; }
+/* El fondo difuminado va en un pseudo-elemento: un backdrop-filter en .nav haría que el menú `fixed` se midiera contra la barra y no contra la pantalla (error en Safari/iOS). */
+.nav::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: -1; background: rgba(43, 29, 20, .88); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); opacity: 0; transition: opacity .35s; }
+.nav.is-solid::before, .nav.is-open::before { opacity: 1; }
+.nav__brand, .nav__toggle, .lang { position: relative; z-index: 2; }
 .nav__brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; font: 400 1.15rem var(--serif); color: var(--paper); margin-right: auto; }
 .nav__links { display: flex; gap: 1.75rem; }
 .nav__links a { text-decoration: none; font-size: .85rem; letter-spacing: .04em; color: var(--ink-soft); transition: color .2s; }
@@ -64,7 +67,7 @@ ul, ol { list-style: none; }
 .nav.is-open .nav__toggle span:last-child { transform: translateY(-4px) rotate(-45deg); }
 @media (max-width: 860px) {
   .nav__toggle { display: block; }
-  .nav__links { position: fixed; inset: 0; background: var(--ink); flex-direction: column; justify-content: center; align-items: center; gap: 2rem; opacity: 0; visibility: hidden; transition: opacity .3s; z-index: -1; }
+  .nav__links { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--ink); flex-direction: column; justify-content: center; align-items: center; gap: 2rem; opacity: 0; visibility: hidden; transition: opacity .3s; z-index: 1; }
   .nav__links a { font: 300 2rem var(--serif); color: var(--paper); }
   .nav.is-open .nav__links { opacity: 1; visibility: visible; }
 }
@@ -373,3 +376,4 @@ body::after { content: ""; position: fixed; top: 0; right: 0; bottom: 0; left: 0
 .footer__nav a { color: var(--ink-soft); text-decoration: none; transition: color .2s; } .footer__nav a:hover { color: var(--gold); }
 .footer__contact { display: flex; flex-direction: column; gap: 1.2rem; align-items: flex-start; }
 @media (min-width: 800px) { .footer__in { grid-template-columns: 1.3fr 1fr 1fr; align-items: start; } }
+body.no-scroll .chat { opacity: 0; pointer-events: none; }
