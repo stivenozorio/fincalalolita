@@ -245,6 +245,23 @@
   </div>
 </footer>
 
+
+<!-- Asistente flotante (gallina): respuestas guiadas, sin IA ni recolección de datos -->
+<div class="chat" id="chat">
+  <p class="chat__tease" id="chatTease" hidden>¿Te ayudo con tu pedido?</p>
+  <section class="chat__panel" id="chatPanel" role="dialog" aria-label="Asistente de Finca La Lolita" hidden>
+    <header class="chat__head">
+      <div><b>Asistente de la finca</b><span>Respuestas rápidas · no es una persona</span></div>
+      <button class="chat__close" id="chatClose" type="button" aria-label="Cerrar asistente">×</button>
+    </header>
+    <div class="chat__log" id="chatLog" aria-live="polite"></div>
+    <div class="chat__opts" id="chatOpts"></div>
+  </section>
+  <button class="chat__fab" id="chatFab" type="button" aria-expanded="false" aria-controls="chatPanel" aria-label="Abrir asistente de la finca">
+    <span class="chat__hen" data-hen aria-hidden="true"></span>
+  </button>
+</div>
+
 <script src="js/config.js"></script>
 <script src="js/catalog.js"></script>
 <script src="js/order-core.js"></script>
@@ -252,5 +269,6 @@
 <script src="js/farm.js"></script>
 <script src="js/scroll-frames.js"></script>
 <script src="js/main.js"></script>
+<script src="js/chat.js"></script>
 </body>
 </html>
