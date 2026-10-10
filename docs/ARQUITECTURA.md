@@ -5,8 +5,9 @@ HTML + CSS + JS sin compilación (el repositorio estaba vacío; no se agregó fr
 - `js/config.js` — número de WhatsApp y textos de contacto (**pendientes**).
 - `js/catalog.js` — catálogo único. Cambiar productos/precios aquí no requiere tocar componentes.
 - `js/order-core.js` — reglas de pedido y mensaje de WhatsApp (probado en `tests/`).
-- `js/scroll-video.js` — hero cinematográfico controlado por scroll.
-- `assets/video/` — `lolita-scrub.mp4` (H.264) y `.webm` (VP9) derivados del video de referencia, con fotogramas clave densos para que el scrub sea fluido.
+- `js/scroll-frames.js` — hero cinematográfico: el scroll controla una secuencia de 250 fotogramas WebP dibujados en `<canvas>` (carga progresiva, mezcla entre fotogramas, fallback a fotos fijas).
+- `js/farm.js` — escena ilustrada de la finca al amanecer (scroll), gallinas SVG y partículas.
+- `assets/frames/` — 250 fotogramas (10 fps, 720 px, ~4,2 MB) extraídos del video de referencia. Se usa canvas y no `<video>` porque Safari/iOS retrasa los seeks de `currentTime` y no carga video sin gesto del usuario.
 - `admin/index.html` — solo diseño de referencia, **sin funciones**.
 
 ## Panel de administración: qué falta
