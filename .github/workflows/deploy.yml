@@ -8,6 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Diagnóstico FTP (no imprime secretos)
+        continue-on-error: true
+        env:
+          U: ${{ secrets.FTP_USERNAME }}
+          P: ${{ secrets.FTP_PASSWORD }}
+          D: ${{ secrets.FTP_SERVER_DIR }}
+        run: |
+          echo "usuario: largo=${#U} tiene_arroba=$([[ "$U" == *@* ]] && echo si || echo no) espacios_o_saltos=$([[ "$U" =~ [[:space:]] ]] && echo SI || echo no)"
+          echo "contraseña: largo=${#P} espacios_o_saltos=$([[ "$P" =~ [[:space:]] ]] && echo SI || echo no)"
+          echo "FTP_SERVER_DIR definido=$([ -n "$D" ] && echo si || echo no)"
+          H=p3plzcpnl489523.prod.phx3.secureserver.net
+          curl -sS --max-time 20 -o /dev/null -u "$U:$P" "ftp://$H/" ; echo "FTP plano -> curl exit=$?"
+          curl -sS --max-time 20 -o /dev/null --ssl-reqd -k -u "$U:$P" "ftp://$H/" ; echo "FTP con TLS explícito -> curl exit=$?"
       - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: p3plzcpnl489523.prod.phx3.secureserver.net   # host FTP (no es secreto)
