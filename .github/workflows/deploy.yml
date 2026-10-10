@@ -11,7 +11,7 @@ jobs:
       - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
+          username: deploy@digicyus.com   # usuario FTP (no es secreto); la contraseña sigue en FTP_PASSWORD
           password: ${{ secrets.FTP_PASSWORD }}
           exclude: |
             **/.git*
