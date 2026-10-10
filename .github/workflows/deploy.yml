@@ -19,8 +19,8 @@ jobs:
           echo "contraseña: largo=${#P} espacios_o_saltos=$([[ "$P" =~ [[:space:]] ]] && echo SI || echo no)"
           echo "FTP_SERVER_DIR definido=$([ -n "$D" ] && echo si || echo no)"
           H=p3plzcpnl489523.prod.phx3.secureserver.net
-          curl -sS --max-time 20 -o /dev/null -u "$U:$P" "ftp://$H/" ; echo "FTP plano -> curl exit=$?"
-          curl -sS --max-time 20 -o /dev/null --ssl-reqd -k -u "$U:$P" "ftp://$H/" ; echo "FTP con TLS explícito -> curl exit=$?"
+          curl -sS --max-time 20 -o /dev/null -u "$U:$P" "ftp://$H/" || true; echo "FTP plano -> hecho"
+          curl -sS --max-time 20 -o /dev/null --ssl-reqd -k -u "$U:$P" "ftp://$H/" || true; echo "FTP con TLS explícito -> hecho"
       - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: p3plzcpnl489523.prod.phx3.secureserver.net   # host FTP (no es secreto)
