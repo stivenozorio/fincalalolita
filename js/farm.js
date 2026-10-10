@@ -5,26 +5,25 @@
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   var uid = 0;
 
-  // Gallina mirando a la derecha. La cabeza (.hen__head) pica con CSS.
+  // Gallina en silueta, a contraluz, mirando a la derecha. La cabeza (.hen__head) pica con CSS.
   function henSVG() {
     var g = "hg" + (++uid);
-    return '<svg viewBox="0 0 130 112" aria-hidden="true" focusable="false">' +
+    return '<svg viewBox="0 0 160 134" aria-hidden="true" focusable="false">' +
       '<defs><linearGradient id="' + g + '" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0" stop-color="var(--hen-top,#c98a46)"/><stop offset=".55" stop-color="var(--hen-mid,#8a4f27)"/><stop offset="1" stop-color="var(--hen-bot,#4a2916)"/></linearGradient></defs>' +
-      '<g class="hen__legs" stroke="var(--hen-leg,#d9a441)" stroke-width="3.2" stroke-linecap="round" fill="none">' +
-        '<path d="M58 86 L56 106 M56 106 l-8 3 M56 106 l6 4 M56 106 l1 5"/><path d="M72 86 L72 106 M72 106 l-8 3 M72 106 l6 4 M72 106 l1 5"/></g>' +
-      '<path d="M24 50 C8 44 4 24 10 10 C18 20 24 24 36 32Z" fill="url(#' + g + ')"/>' +
-      '<path d="M22 58 C6 56 0 40 2 30 C12 38 20 42 30 46Z" fill="url(#' + g + ')" opacity=".9"/>' +
-      '<path d="M20 52 C20 34 44 26 68 32 C86 36 96 50 93 64 C90 80 70 90 50 88 C30 86 20 72 20 52Z" fill="url(#' + g + ')"/>' +
-      '<path d="M38 56 C48 46 68 46 80 56 C72 72 50 76 38 56Z" fill="#fff" opacity=".14"/>' +
-      '<g class="hen__head">' +
-        '<path d="M76 44 C82 32 88 22 90 16 C94 11 105 13 105 22 C105 28 100 34 96 42 C92 52 84 54 76 52Z" fill="url(#' + g + ')"/>' +
-        '<circle cx="98" cy="19" r="9.5" fill="var(--hen-head,#a9622f)"/>' +
-        '<g fill="#d8362b"><circle cx="93" cy="8.5" r="4.2"/><circle cx="99" cy="6.5" r="4.6"/><circle cx="105" cy="9.5" r="3.8"/></g>' +
-        '<path d="M107 17 L121 22 L107 26Z" fill="#e6b94f"/>' +
-        '<path d="M101 27 C100 35 106 35 105 27Z" fill="#d8362b"/>' +
-        '<circle cx="101" cy="17" r="1.8" fill="#1a0f08"/>' +
-      '</g></svg>';
+      '<stop offset="0" stop-color="var(--hen-top,#4b2c16)"/><stop offset=".45" stop-color="var(--hen-mid,#1c110a)"/><stop offset="1" stop-color="var(--hen-bot,#0b0604)"/></linearGradient></defs>' +
+      '<g stroke="var(--hen-leg,#0d0704)" stroke-width="2.6" stroke-linecap="round" fill="none">' +
+        '<path d="M72 104 L70 126 M70 126 l-9 4 M70 126 l8 4 M70 126 l1 6"/><path d="M90 102 L90 126 M90 126 l-9 4 M90 126 l8 4 M90 126 l1 6"/></g>' +
+      '<g fill="url(#' + g + ')">' +
+        '<path d="M36 66 C24 58 14 40 12 20 C20 30 26 28 30 40 C28 26 35 20 41 29 C39 40 45 48 50 56Z"/>' +
+        '<path d="M32 72 C16 70 6 56 4 42 C14 50 22 52 35 58Z"/>' +
+        '<path d="M30 74 C28 60 40 52 58 52 C78 50 100 52 112 60 C124 66 124 82 114 94 C104 108 84 110 64 106 C44 102 32 92 30 74Z"/>' +
+        '<g transform="translate(-3 17)"><g class="hen__head">' +
+          '<path d="M104 60 C108 46 112 36 116 28 C120 17 133 15 137 24 C139 30 135 34 131 40 C127 50 125 58 121 66Z"/>' +
+          '<circle cx="129" cy="22" r="8.5"/>' +
+          '<path d="M122 15 c-1 -6 5 -8 6 -3 c2 -5 8 -3 6 3 c3 -2 6 1 3 5Z"/>' +
+          '<path d="M136 22 L149 27 L136 30Z"/>' +
+          '<path d="M132 31 c-1 7 5 7 4 0Z"/>' +
+        '</g></g></g></svg>';
   }
   function mountHens() {
     document.querySelectorAll("[data-hen]").forEach(function (el) { if (!el.firstChild) el.innerHTML = henSVG(); });
@@ -36,8 +35,8 @@
       var n = parseInt(box.getAttribute("data-motes"), 10) || 12;
       var html = "";
       for (var i = 0; i < n; i++) {
-        var left = Math.random() * 100, size = 2 + Math.random() * 4, dur = 9 + Math.random() * 12, delay = -Math.random() * 20, drift = (Math.random() - .5) * 120;
-        html += '<i style="left:' + left.toFixed(1) + '%;width:' + size.toFixed(1) + 'px;height:' + size.toFixed(1) + 'px;animation-duration:' + dur.toFixed(1) + 's;animation-delay:' + delay.toFixed(1) + 's;--dx:' + drift.toFixed(0) + 'px"></i>';
+        var big = Math.random() < .22, left = Math.random() * 100, size = (big ? 7 : 2) + Math.random() * (big ? 6 : 3), dur = 9 + Math.random() * 12, delay = -Math.random() * 20, drift = (Math.random() - .5) * 120;
+        html += '<i' + (big ? ' class="bokeh"' : '') + ' style="left:' + left.toFixed(1) + '%;width:' + size.toFixed(1) + 'px;height:' + size.toFixed(1) + 'px;animation-duration:' + dur.toFixed(1) + 's;animation-delay:' + delay.toFixed(1) + 's;--dx:' + drift.toFixed(0) + 'px"></i>';
       }
       box.innerHTML = html;
     });

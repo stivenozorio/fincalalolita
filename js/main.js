@@ -16,7 +16,6 @@
   var heroEl = $("top");
   function navState() { nav.classList.toggle("is-solid", heroEl.getBoundingClientRect().bottom < window.innerHeight * 0.6); }
   window.addEventListener("scroll", navState, { passive: true }); navState();
-  $("langBtn").addEventListener("click", function () { I.toggle(); });
   $("year").textContent = new Date().getFullYear();
 
   /* ---------- Revelados reversibles ---------- */
