@@ -1,6 +1,6 @@
 # Despliegue MANUAL de Finca La Lolita a https://fincalalolita.digicyus.com
 # Sube por FTPS explícito con lftp (misma técnica que el despliegue del sitio DigiCy).
-# Secretos usados: FTP_SERVER, FTP_USERNAME y FTP_PASSWORD. El destino es fijo (no hay secreto de directorio).
+# Secretos usados: FTP_USERNAME y FTP_PASSWORD. Servidor (ftp.digicyus.com) y destino son fijos.
 name: Deploy (manual)
 on:
   workflow_dispatch: {}
@@ -28,20 +28,22 @@ jobs:
 
       - name: Publicar por FTPS
         env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
           # Destino FIJO a propósito: con la cuenta deploy@ la raíz FTP es public_html (digicyus.com).
           # No se lee de ningún secreto para que un valor equivocado nunca pueda pisar otro sitio.
+          # Servidor FTP real según cPanel (Configure FTP Client): ftp.digicyus.com, puerto 21, FTPS explícito.
+          # Es fijo (no es secreto) porque el valor guardado antes en FTP_SERVER apuntaba al host de cPanel, que rechazaba el login.
+          FTP_HOST="ftp.digicyus.com"
           DEST="fincalalolita.digicyus.com/"
           case "$DEST" in ""|"/"|"."|"./") echo "::error::destino inseguro"; exit 1;; esac
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
           for attempt in 1 2 3; do
             if lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" \
               -e "set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set net:reconnect-interval-base 5; mirror -R --verbose out/ ${DEST}; bye" \
-              "${FTP_SERVER}"; then
+              "${FTP_HOST}"; then
               exit 0
             fi
             echo "Intento ${attempt} falló, reintentando en 10s..."
