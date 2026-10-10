@@ -1,0 +1,21 @@
+# Despliegue FTP MANUAL (no se ejecuta con cada push). Requiere autorización antes de lanzarlo.
+# AJUSTAR los nombres de los secretos si los del repositorio se llaman distinto.
+name: Deploy (manual)
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            tests/**
+            docs/**
+            README.md

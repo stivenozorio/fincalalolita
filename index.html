@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Finca La Lolita — Every Egg Has a Story</title>
+  <meta name="description" content="Finca La Lolita: a family dream growing one day at a time. Choose your eggs and order on WhatsApp.">
+  <!-- Mantener noindex hasta que Dagoberto apruebe el sitio; luego borrar esta línea. -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#2B1D14">
+  <meta property="og:title" content="Finca La Lolita — Every Egg Has a Story">
+  <meta property="og:description" content="A family dream, growing one day at a time.">
+  <meta property="og:image" content="https://fincalalolita.digicyus.com/assets/img/poster.jpg">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preload" as="image" href="assets/img/poster.jpg">
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top" aria-label="Finca La Lolita">
+    <svg width="22" height="28" viewBox="0 0 22 28" aria-hidden="true"><path d="M11 1C5.5 1 1 10 1 17a10 10 0 0 0 20 0C21 10 16.500 1 11 1z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+    <span>Finca La Lolita</span>
+  </a>
+  <nav class="nav__links" id="navLinks" aria-label="Main">
+    <a href="#story" data-i18n="nav.story">Our Story</a>
+    <a href="#products" data-i18n="nav.products">Products</a>
+    <a href="#how" data-i18n="nav.how">How to Order</a>
+    <a href="#care" data-i18n="nav.care">Care</a>
+    <a href="#community" data-i18n="nav.community">Community</a>
+  </nav>
+  <button class="lang" id="langBtn" type="button" aria-label="Cambiar idioma / Change language">ES</button>
+  <button class="nav__toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Menu"><span></span><span></span></button>
+</header>
+
+<main id="main">
+  <!-- 1 · HERO: video controlado por scroll -->
+  <section class="hero" id="top" aria-label="Finca La Lolita">
+    <div class="hero__sticky">
+      <div class="hero__stage">
+        <img class="hero__poster" src="assets/img/poster.jpg" alt="" width="910" height="512" fetchpriority="high">
+        <div class="hero__scenes" aria-hidden="true">
+          <img src="assets/img/scene-1.jpg" alt="" loading="lazy"><img src="assets/img/scene-2.jpg" alt="" loading="lazy">
+          <img src="assets/img/scene-3.jpg" alt="" loading="lazy"><img src="assets/img/scene-4.jpg" alt="" loading="lazy">
+          <img src="assets/img/scene-5.jpg" alt="" loading="lazy">
+        </div>
+        <video class="hero__video" muted playsinline webkit-playsinline preload="auto" tabindex="-1" aria-hidden="true"
+               poster="assets/img/poster.jpg" disablepictureinpicture disableremoteplayback>
+          <source src="assets/video/lolita-scrub.mp4" type='video/mp4; codecs="avc1.640020"'>
+          <source src="assets/video/lolita-scrub.webm" type='video/webm; codecs="vp9"'>
+        </video>
+      </div>
+      <div class="hero__shade" aria-hidden="true"></div>
+      <div class="hero__cut" aria-hidden="true"></div>
+
+      <div class="hero__intro" id="heroIntro">
+        <p class="eyebrow">FINCA LA LOLITA</p>
+        <h1 class="display" data-i18n="hero.title">Every Egg Has a Story.</h1>
+        <p class="lead" data-i18n="hero.sub">A family dream, growing one day at a time.</p>
+        <a class="btn btn--gold" href="#products" data-i18n="hero.cta">Discover Our Products</a>
+      </div>
+
+      <ol class="hero__chapters" id="heroChapters" aria-hidden="true">
+        <li><span data-i18n="ch1.k">Origin</span><b data-i18n="ch1.t">Every story starts small.</b></li>
+        <li><span data-i18n="ch2.k">Care</span><b data-i18n="ch2.t">Held with care.</b></li>
+        <li><span data-i18n="ch3.k">Home</span><b data-i18n="ch3.t">Made for the family table.</b></li>
+        <li><span data-i18n="ch4.k">Warmth</span><b data-i18n="ch4.t">Unhurried, warm mornings.</b></li>
+        <li><span data-i18n="ch5.k">Together</span><b data-i18n="ch5.t">Shared with the people we love.</b></li>
+      </ol>
+      <a class="btn btn--gold hero__end" id="heroEnd" href="#products" data-i18n="hero.cta">Discover Our Products</a>
+
+      <div class="hero__hint" id="heroHint"><span data-i18n="hero.scroll">Scroll</span><i></i></div>
+      <div class="hero__progress" aria-hidden="true"><i id="heroBar"></i></div>
+      <div class="hero__loading" id="heroLoading" role="status" aria-live="polite"><i></i><span data-i18n="hero.loading">Loading the story…</span></div>
+    </div>
+  </section>
+
+  <!-- 2 · HISTORIA -->
+  <section class="sec sec--dark story" id="story">
+    <div class="wrap story__grid">
+      <figure class="story__img story__img--a reveal"><img src="assets/img/scene-3.jpg" alt="" loading="lazy" width="910" height="512"></figure>
+      <div class="story__text">
+        <p class="eyebrow reveal" data-i18n="story.eyebrow">Our Story</p>
+        <h2 class="h2 reveal" data-i18n="story.title">A Dream Rooted in Family.</h2>
+        <p class="body reveal" data-i18n="story.body">Finca La Lolita began with Dagoberto's dream of creating a finca for his parents, Efraín and Lucila. Today, that dream is becoming a family business built with care, purpose, and the ambition to grow for generations.</p>
+        <p class="sign reveal">Efraín <i>&amp;</i> Lucila</p>
+      </div>
+      <figure class="story__img story__img--b reveal"><img src="assets/img/scene-1.jpg" alt="" loading="lazy" width="910" height="512"></figure>
+    </div>
+  </section>
+
+  <!-- 3 · PRODUCTOS -->
+  <section class="sec sec--light" id="products">
+    <div class="wrap">
+      <p class="eyebrow eyebrow--dark reveal" data-i18n="prod.eyebrow">Products</p>
+      <h2 class="h2 h2--dark reveal" data-i18n="prod.title">Fresh Choices, Made Simple.</h2>
+      <div class="notice" id="previewBanner" hidden></div>
+      <div class="catalog" id="catalog" aria-live="polite"></div>
+      <div class="catalog-empty" id="catalogEmpty" hidden>
+        <h3 data-i18n="prod.emptyT">Our catalog is being prepared.</h3>
+        <p data-i18n="prod.emptyB">We are confirming products, presentations and prices with Dagoberto. They will appear here as soon as they are ready.</p>
+      </div>
+    </div>
+
+    <!-- Resumen del pedido -->
+    <aside class="order" id="order" aria-label="Order summary" hidden>
+      <button class="order__bar" id="orderBar" type="button" aria-expanded="false" aria-controls="orderPanel">
+        <span><b id="orderCount">0</b> <span data-i18n="order.items">items</span></span>
+        <span id="orderTotalBar"></span>
+        <span class="order__chev" aria-hidden="true">▴</span>
+      </button>
+      <div class="order__panel" id="orderPanel">
+        <h3 data-i18n="order.title">Your order</h3>
+        <ul class="order__lines" id="orderLines"></ul>
+        <p class="order__total" id="orderTotal"></p>
+        <label class="field"><span data-i18n="order.notes">Notes (optional)</span>
+          <textarea id="orderNotes" rows="2" maxlength="500" data-i18n-ph="order.notesPh" placeholder="Address reference, delivery time, anything we should know"></textarea>
+        </label>
+        <a class="btn btn--wa" id="waLink" href="#" target="_blank" rel="noopener noreferrer" hidden data-i18n="order.cta">Order on WhatsApp</a>
+        <button class="btn btn--wa" id="waDisabled" type="button" disabled data-i18n="order.cta">Order on WhatsApp</button>
+        <p class="order__fine" id="orderFine"></p>
+      </div>
+    </aside>
+  </section>
+
+  <!-- 4 · CÓMO PEDIR -->
+  <section class="sec sec--cream" id="how">
+    <div class="wrap">
+      <p class="eyebrow eyebrow--dark reveal" data-i18n="how.eyebrow">How to Order</p>
+      <h2 class="h2 h2--dark reveal" data-i18n="how.title">Four simple steps.</h2>
+      <ol class="steps">
+        <li class="reveal"><b>01</b><h3 data-i18n="how.1t">Choose</h3><p data-i18n="how.1b">Pick your eggs and the presentation you prefer.</p></li>
+        <li class="reveal"><b>02</b><h3 data-i18n="how.2t">Set quantities</h3><p data-i18n="how.2b">Review your order summary and add any notes.</p></li>
+        <li class="reveal"><b>03</b><h3 data-i18n="how.3t">Send on WhatsApp</h3><p data-i18n="how.3b">We open WhatsApp with your order already written. You just press send.</p></li>
+        <li class="reveal"><b>04</b><h3 data-i18n="how.4t">We confirm with you</h3><p data-i18n="how.4b">Sending the message is a request, not a purchase. Dagoberto confirms availability and delivery with you.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 5 · CALIDAD Y CUIDADO -->
+  <section class="sec sec--dark care" id="care">
+    <div class="wrap care__grid">
+      <div>
+        <p class="eyebrow reveal" data-i18n="care.eyebrow">Care</p>
+        <h2 class="h2 reveal" data-i18n="care.title">Care in every order.</h2>
+        <p class="body reveal" data-i18n="care.body">We believe a simple product deserves attention to detail. That starts with how each order is received, confirmed and delivered.</p>
+      </div>
+      <ul class="care__list">
+        <li class="reveal"><h3 data-i18n="care.1t">A person, not a form</h3><p data-i18n="care.1b">Every order is confirmed directly with Dagoberto over WhatsApp.</p></li>
+        <li class="reveal"><h3 data-i18n="care.2t">Clear prices</h3><p data-i18n="care.2b">Prices are shown in Colombian pesos, and you see your total before you send.</p></li>
+        <li class="reveal"><h3 data-i18n="care.3t">Honest information</h3><p data-i18n="care.3b">We only publish what is confirmed: products, presentations and delivery areas.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6 · COMUNIDAD -->
+  <section class="sec sec--cream" id="community">
+    <div class="wrap community">
+      <p class="eyebrow eyebrow--dark reveal" data-i18n="com.eyebrow">Community</p>
+      <h2 class="h2 h2--dark reveal" data-i18n="com.title">More Than a Purchase. A Growing Community.</h2>
+      <p class="body body--dark reveal" data-i18n="com.body">Finca La Lolita grows with its neighbors. Over time we want to remember our customers, thank the ones who return, and make it easy to reorder.</p>
+      <ul class="soon">
+        <li class="reveal"><span data-i18n="soon">Coming later</span><h3 data-i18n="com.1t">Reorder reminders</h3></li>
+        <li class="reveal"><span data-i18n="soon">Coming later</span><h3 data-i18n="com.2t">Rewards for loyal customers</h3></li>
+        <li class="reveal"><span data-i18n="soon">Coming later</span><h3 data-i18n="com.3t">Neighbor referrals</h3></li>
+      </ul>
+      <p class="fine" data-i18n="com.fine">We will only keep customer information with your permission, and use it only for what we tell you.</p>
+    </div>
+  </section>
+
+  <!-- 7 · CTA -->
+  <section class="sec sec--dark cta" id="cta">
+    <div class="wrap cta__in">
+      <h2 class="h2 reveal" data-i18n="cta.title">Bring a family story to your table.</h2>
+      <a class="btn btn--gold reveal" href="#products" data-i18n="cta.btn">See the products</a>
+    </div>
+  </section>
+</main>
+
+<!-- 8 · FOOTER -->
+<footer class="footer">
+  <div class="wrap footer__in">
+    <div><b>Finca La Lolita</b><p data-i18n="foot.tag">A family dream, growing one day at a time.</p></div>
+    <p class="footer__fine">© <span id="year"></span> Finca La Lolita · <span data-i18n="foot.by">Website by</span> DigiCy</p>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/catalog.js"></script>
+<script src="js/order-core.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/scroll-video.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
