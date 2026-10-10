@@ -1,22 +1,61 @@
-# Despliegue FTP MANUAL (no se ejecuta con cada push). Requiere autorización antes de lanzarlo.
-# AJUSTAR los nombres de los secretos si los del repositorio se llaman distinto.
+# Despliegue MANUAL de Finca La Lolita a https://fincalalolita.digicyus.com
+# Sube por FTPS explícito con lftp (misma técnica que el despliegue del sitio DigiCy).
+# Secretos usados: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD y, opcional, FTP_SERVER_DIR.
 name: Deploy (manual)
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
+
+concurrency:
+  # Una sola sesión FTP a la vez: el hosting puede bloquear al runner tras sesiones largas o repetidas.
+  group: deploy-godaddy
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER || 'p3plzcpnl489523.prod.phx3.secureserver.net' }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR || '/fincalalolita.digicyus.com/' }}
-          exclude: |
-            **/.git*
-            **/.git*/**
-            tests/**
-            docs/**
-            README.md
+
+      - name: Preparar y validar el paquete
+        run: |
+          set -euo pipefail
+          mkdir out
+          cp -r index.html css js assets admin out/
+          test -f out/index.html || { echo "::error::falta out/index.html"; exit 1; }
+          test "$(ls out/assets/frames | wc -l)" -eq 250 || { echo "::error::faltan fotogramas"; exit 1; }
+          grep -q "Cada huevo tiene una historia" out/index.html || { echo "::error::el home no trae su titular"; exit 1; }
+          echo "Paquete listo: $(find out -type f | wc -l) archivos, $(du -sh out | cut -f1)"
+
+      - name: Publicar por FTPS
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+        run: |
+          set -euo pipefail
+          DEST="${FTP_SERVER_DIR:-/fincalalolita.digicyus.com/}"
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          for attempt in 1 2 3; do
+            if lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" \
+              -e "set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set net:reconnect-interval-base 5; mirror -R --verbose out/ ${DEST}; bye" \
+              "${FTP_SERVER}"; then
+              exit 0
+            fi
+            echo "Intento ${attempt} falló, reintentando en 10s..."
+            sleep 10
+          done
+          exit 1
+
+      - name: Verificar el sitio en vivo
+        run: |
+          set -uo pipefail
+          sleep 30
+          for attempt in 1 2 3 4 5; do
+            if curl -sSf --connect-timeout 20 --max-time 40 https://fincalalolita.digicyus.com/ -o page.html; then
+              grep -q "Cada huevo tiene una historia" page.html && { echo "Confirmado: el sitio en vivo refleja este despliegue."; exit 0; }
+              echo "::error::el sitio responde pero no muestra el contenido nuevo"; head -c 1500 page.html; exit 1
+            fi
+            sleep 20
+          done
+          echo "::warning::No se pudo conectar al sitio desde el runner; la subida terminó bien pero queda sin comprobar."
