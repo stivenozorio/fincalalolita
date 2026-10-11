@@ -9,9 +9,9 @@
    (con "Reducir movimiento" solo se apagan las animaciones que corren solas). */
 (function () {
   "use strict";
-  var N = 250, FPS = 10, DIR = "assets/frames/";
-  var CUTS = [50, 100, 150, 200];          // índices donde empieza un clip nuevo (corte duro)
-  var SCENES = 5, MAX_W = 1600, CONC = 6;
+  var N = 300, FPS = 12, DIR = "assets/frames/";
+  var CUTS = [60, 120, 180, 240];          // índices donde empieza un clip nuevo (corte duro)
+  var SCENES = 5, MAX_W = 1920, CONC = 6;
 
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
   function pad(n) { return ("000" + n).slice(-4); }
@@ -80,10 +80,11 @@
     /* ---------- dibujo ---------- */
     function size() {
       var r = canvas.getBoundingClientRect();
-      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var dpr = Math.min(window.devicePixelRatio || 1, 3);   // 3× para que el celular dibuje a su resolución real y no estire la imagen
       var w = Math.round(Math.min(r.width * dpr, MAX_W)), h = Math.round(w * r.height / Math.max(r.width, 1));
       if (Math.abs(w - cw) > 2 || Math.abs(h - ch) > 120) {   // ignora la barra de URL de iOS (cambios pequeños de alto)
         cw = canvas.width = w; ch = canvas.height = h; dirty = true;
+        ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
       }
     }
     function nearest(i) {
@@ -93,6 +94,7 @@
       }
       return null;
     }
+    if (ctx) { ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high"; }   // reescalado de mayor calidad
     function cover(img, alpha) {
       var iw = img.naturalWidth, ih = img.naturalHeight, s = Math.max(cw / iw, ch / ih);
       var w = iw * s, h = ih * s;

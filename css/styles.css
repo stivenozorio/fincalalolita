@@ -105,7 +105,7 @@ ul, ol { list-style: none; }
 @media (orientation: portrait) {
   .hero { height: 440vh; }
   .hero__stage { background: var(--ink); }
-  .hero__stage > * { top: 7vh; top: 7svh; height: auto; aspect-ratio: 4 / 5; -webkit-mask-image: linear-gradient(180deg, transparent, #000 10%, #000 86%, transparent); mask-image: linear-gradient(180deg, transparent, #000 10%, #000 86%, transparent); }
+  .hero__stage > * { top: 9vh; top: 9svh; height: auto; aspect-ratio: 4 / 3; -webkit-mask-image: linear-gradient(180deg, transparent, #000 10%, #000 86%, transparent); mask-image: linear-gradient(180deg, transparent, #000 10%, #000 86%, transparent); }
   .hero__scenes img { height: 100%; width: 100%; }
   .hero__shade { background: linear-gradient(180deg, rgba(43, 29, 20, .5) 0, transparent 18%, transparent 56%, var(--ink) 74%); }
   .hero__intro { bottom: clamp(60px, 9vh, 96px); }
