@@ -405,3 +405,11 @@ body.no-scroll .chat { opacity: 0; pointer-events: none; }
 .nav__logo { display: block; height: 80px; width: auto; transition: height .4s var(--ease); filter: drop-shadow(0 2px 16px rgba(0, 0, 0, .55)); }
 .nav.is-small .nav__logo, .nav.is-open .nav__logo { height: 54px; }
 @media (max-width: 860px) { .nav__logo { height: 64px; } .nav.is-small .nav__logo, .nav.is-open .nav__logo { height: 46px; } }
+
+/* Historia: la ventana del huevo (imagen nítida + animación al bajar) y el texto de fondo sin cortarse */
+.egg { position: relative; }
+.egg img { object-position: 60% center; }
+.egg__canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .8s var(--ease); }
+.egg.is-live .egg__canvas { opacity: 1; }
+.story { padding-top: clamp(120px, 19vw, 270px); }
+.ghost { top: 2%; font-size: clamp(5rem, 17vw, 16rem); }
