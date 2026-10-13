@@ -9,16 +9,19 @@
    (con "Reducir movimiento" solo se apagan las animaciones que corren solas). */
 (function () {
   "use strict";
-  /* Videos disponibles. Por defecto se usa DEFAULT_VARIANT; para probar otro: añadir ?video=b al enlace.
-     Para cambiar el video de todos los visitantes basta con cambiar DEFAULT_VARIANT. */
+  /* Videos disponibles. Por defecto se usa DEFAULT_VARIANT (hoy "b"); para ver el otro: añadir ?video=a (o ?video=b) al enlace.
+     Para cambiar el video de todos los visitantes basta con cambiar DEFAULT_VARIANT (y el póster/fotos/textos del HTML). */
   var VARIANTS = {
-    a: { dir: "assets/frames/", n: 300, cuts: [60, 120, 180, 240] },     // nido → huevo → mesa (5 clips con cortes duros)
+    a: { dir: "assets/frames/", n: 300, cuts: [60, 120, 180, 240],     // nido → huevo → mesa (5 clips con cortes duros) — video anterior, disponible con ?video=a
+         poster: "assets/img/poster.jpg",
+         stills: ["assets/img/scene-1.jpg", "assets/img/scene-2.jpg", "assets/img/scene-3.jpg", "assets/img/scene-4.jpg", "assets/img/scene-5.jpg"],
+         captions: [["Origen", "Toda historia empieza pequeña."], ["Cuidado", "Sostenido con cuidado."], ["Hogar", "Hecho para la mesa familiar."], ["Calidez", "Mañanas cálidas, sin prisa."], ["Juntos", "Compartido con quienes queremos."]] },
     b: { dir: "assets/frames-b/", n: 240, cuts: [],                       // un solo plano continuo: huevo → cáscara → yema → finca
          poster: "assets/img/poster-b.jpg",
          stills: ["assets/img/scene-b-1.jpg", "assets/img/scene-b-2.jpg", "assets/img/scene-b-3.jpg", "assets/img/scene-b-4.jpg", "assets/img/scene-b-5.jpg"],
          captions: [["Origen", "Todo empieza con un huevo."], ["Cuidado", "Sostenido con cuidado."], ["Despertar", "Y de pronto, todo se abre."], ["Dentro", "Allí empieza la vida del día."], ["Finca", "Siempre se vuelve a la finca."]] }
   };
-  var DEFAULT_VARIANT = "a";
+  var DEFAULT_VARIANT = "b";
   var qv = /[?&]video=(\w+)/.exec(location.search);
   var VAR = VARIANTS[(qv && qv[1]) || DEFAULT_VARIANT] || VARIANTS[DEFAULT_VARIANT];
   var N = VAR.n, DIR = VAR.dir, CUTS = VAR.cuts;   // CUTS: índices donde empieza un clip nuevo (corte duro); vacío = plano continuo
