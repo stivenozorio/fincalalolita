@@ -10,20 +10,25 @@
   <meta name="theme-color" content="#2B1D14">
   <meta property="og:title" content="Finca La Lolita — Cada huevo tiene una historia">
   <meta property="og:description" content="Un sueño familiar que crece un día a la vez.">
-  <meta property="og:image" content="https://fincalalolita.digicyus.com/assets/img/poster.jpg">
-  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <meta property="og:image" content="https://fincalalolita.digicyus.com/assets/logo/og-logo.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/logo/favicon-64.png" type="image/png" sizes="64x64">
+  <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preload" as="image" href="assets/img/poster.jpg">
+  <link rel="preload" as="image" href="assets/logo/wordmark-crema.webp">
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
 
 <header class="nav" id="nav">
   <a class="nav__brand" href="#top" aria-label="Finca La Lolita">
-    <svg width="22" height="28" viewBox="0 0 22 28" aria-hidden="true"><path d="M11 1C5.5 1 1 10 1 17a10 10 0 0 0 20 0C21 10 16.500 1 11 1z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+    <img class="nav__mark" src="assets/logo/hojas-dorado.webp" alt="" width="38" height="20" decoding="async">
     <span>Finca La Lolita</span>
   </a>
   <nav class="nav__links" id="navLinks" aria-label="Principal">
@@ -54,7 +59,7 @@
       <div class="hero__cut" aria-hidden="true"></div>
 
       <div class="hero__intro" id="heroIntro">
-        <p class="eyebrow">FINCA LA LOLITA</p>
+        <img class="hero__logo" src="assets/logo/wordmark-crema.webp" alt="Finca La Lolita, de Efraín y Lucila" width="1000" height="809" decoding="async">
         <h1 class="display">Cada huevo tiene una historia.</h1>
         <p class="lead">Un sueño familiar que crece un día a la vez.</p>
         <a class="btn btn--gold" href="#products">Descubre nuestros productos</a>
@@ -126,8 +131,8 @@
   </section>
 
   <div class="marquee" aria-hidden="true"><div class="marquee__track">
-    <span>Finca La Lolita</span><i>✦</i><span>Un sueño familiar</span><i>✦</i><span>Huevos con historia</span><i>✦</i><span>Efraín &amp; Lucila</span><i>✦</i>
-    <span>Finca La Lolita</span><i>✦</i><span>Un sueño familiar</span><i>✦</i><span>Huevos con historia</span><i>✦</i><span>Efraín &amp; Lucila</span><i>✦</i>
+    <span>Finca La Lolita</span><img class="mq__leaf" src="assets/logo/hojas-oscuro.webp" alt="" width="30" height="16" loading="lazy"><span>Un sueño familiar</span><img class="mq__leaf" src="assets/logo/hojas-oscuro.webp" alt="" width="30" height="16" loading="lazy"><span>Huevos con historia</span><img class="mq__leaf" src="assets/logo/hojas-oscuro.webp" alt="" width="30" height="16" loading="lazy"><span>Efraín &amp; Lucila</span><img class="mq__leaf" src="assets/logo/hojas-oscuro.webp" alt="" width="30" height="16" loading="lazy">
+    <span>Finca La Lolita</span><img class="mq__leaf" src="assets/logo/hojas-oscuro.webp" alt="" width="30" height="16" loading="lazy"><span>Un sueño familiar</span><img class="mq__leaf" src="assets/logo/hojas-oscuro.webp" alt="" width="30" height="16" loading="lazy"><span>Huevos con historia</span><img class="mq__leaf" src="assets/logo/hojas-oscuro.webp" alt="" width="30" height="16" loading="lazy"><span>Efraín &amp; Lucila</span><img class="mq__leaf" src="assets/logo/hojas-oscuro.webp" alt="" width="30" height="16" loading="lazy">
   </div></div>
 
   <!-- 3 · HISTORIA -->
@@ -141,7 +146,9 @@
         <p class="body body--words" data-words>Finca La Lolita nació del sueño de Dagoberto de crear una finca para sus padres, Efraín y Lucila. Hoy, ese sueño se está convirtiendo en un negocio familiar hecho con cuidado, propósito y la ambición de crecer por generaciones.</p>
         <p class="sign reveal">Efraín <i>&amp;</i> Lucila</p>
       </div>
-      <figure class="story__img story__img--b egg reveal" data-parallax="-0.1"><img src="assets/img/scene-1.jpg" alt="" loading="lazy" width="1000" height="563"></figure>
+      <figure class="story__seal reveal" data-parallax="-0.08">
+        <div class="seal"><img src="assets/logo/ilustrado.webp" alt="Logo de Finca La Lolita, de Efraín y Lucila" width="1100" height="911" loading="lazy" decoding="async"></div>
+      </figure>
     </div>
   </section>
 
@@ -149,6 +156,7 @@
 
   <!-- 4 · PRODUCTOS -->
   <section class="sec sec--light edge" id="products">
+    <img class="prod__mark" src="assets/logo/ilustrado.webp" alt="" aria-hidden="true" width="1100" height="911" loading="lazy" decoding="async">
     <div class="wrap">
       <p class="eyebrow eyebrow--dark reveal">Productos</p>
       <h2 class="h2 h2--dark reveal">Opciones frescas, hechas simples.</h2>
@@ -158,7 +166,7 @@
       <div class="notice" id="previewBanner" hidden></div>
       <div class="catalog" id="catalog" aria-live="polite"></div>
       <div class="catalog-empty" id="catalogEmpty" hidden>
-        <div class="hen hen--dark" data-hen></div>
+        <img class="empty__logo" src="assets/logo/ilustrado.webp" alt="Finca La Lolita, de Efraín y Lucila" width="1100" height="911" loading="lazy" decoding="async">
         <h3>Estamos preparando el catálogo.</h3>
         <p>Estamos confirmando con Dagoberto los productos, presentaciones y precios. Aparecerán aquí en cuanto estén listos.</p>
       </div>
@@ -189,6 +197,7 @@
     <div class="wrap">
       <p class="eyebrow eyebrow--dark reveal">Cómo pedir</p>
       <h2 class="h2 h2--dark reveal">Cuatro pasos simples.</h2>
+      <img class="orn reveal" src="assets/logo/ramita-oscuro.webp" alt="" width="520" height="214" loading="lazy" decoding="async">
       <ol class="steps">
         <li class="reveal"><b>01</b><h3>Elige</h3><p>Escoge tus huevos y la presentación que prefieras.</p></li>
         <li class="reveal"><b>02</b><h3>Indica cantidades</h3><p>Revisa el resumen de tu pedido y agrega observaciones.</p></li>
@@ -226,6 +235,7 @@
         <li class="reveal"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4l3.6 7.6 8.4 1-6.2 5.7 1.7 8.3L16 22.400 8.500 26.600l1.700-8.300L4 12.600l8.400-1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Próximamente</span><h3>Recompensas para clientes fieles</h3></li>
         <li class="reveal"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="22" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 26c0-5 3.500-8 8-8s8 3 8 8M17 20c1.500-1.200 3-2 5-2 4.500 0 7 3 7 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>Próximamente</span><h3>Referidos entre vecinos</h3></li>
       </ul>
+      <img class="comm__logo reveal" src="assets/logo/wordmark-oscuro.webp" alt="Finca La Lolita, de Efraín y Lucila" width="1000" height="809" loading="lazy" decoding="async">
       <p class="fine">Solo guardaremos información de clientes con tu permiso y la usaremos únicamente para lo que te informemos.</p>
     </div>
   </section>
@@ -235,6 +245,7 @@
     <div class="cta__glow" aria-hidden="true"></div>
     <div class="cta__sun" data-rise aria-hidden="true"></div>
     <div class="wrap cta__in">
+      <img class="cta__logo reveal" src="assets/logo/wordmark-crema.webp" alt="Finca La Lolita, de Efraín y Lucila" width="1000" height="809" loading="lazy" decoding="async">
       <h2 class="h2 h2--xl reveal">Lleva una historia familiar a tu mesa.</h2>
       <a class="btn btn--gold reveal" href="#products">Ver los productos</a>
     </div>
@@ -246,7 +257,7 @@
 </main>
 
 <footer class="footer">
-  <p class="footer__mark" aria-hidden="true">Finca La Lolita</p>
+  <img class="footer__logo" src="assets/logo/wordmark-crema.webp" alt="Finca La Lolita, de Efraín y Lucila" width="1000" height="809" loading="lazy" decoding="async">
   <div class="wrap footer__in">
     <div class="footer__brand"><b>Finca La Lolita</b><p>Un sueño familiar que crece un día a la vez.</p></div>
     <nav class="footer__nav" aria-label="Pie de página">
@@ -265,6 +276,7 @@
   <p class="chat__tease" id="chatTease" hidden>¿Te ayudo con tu pedido?</p>
   <section class="chat__panel" id="chatPanel" role="dialog" aria-label="Asistente de Finca La Lolita" hidden>
     <header class="chat__head">
+      <img class="chat__ico" src="assets/logo/hojas-dorado.webp" alt="" width="34" height="18">
       <div><b>Asistente de la finca</b><span>Respuestas rápidas · no es una persona</span></div>
       <button class="chat__close" id="chatClose" type="button" aria-label="Cerrar asistente">×</button>
     </header>
