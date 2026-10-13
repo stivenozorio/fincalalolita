@@ -9,8 +9,19 @@
    (con "Reducir movimiento" solo se apagan las animaciones que corren solas). */
 (function () {
   "use strict";
-  var N = 300, FPS = 12, DIR = "assets/frames/";
-  var CUTS = [60, 120, 180, 240];          // índices donde empieza un clip nuevo (corte duro)
+  /* Videos disponibles. Por defecto se usa DEFAULT_VARIANT; para probar otro: añadir ?video=b al enlace.
+     Para cambiar el video de todos los visitantes basta con cambiar DEFAULT_VARIANT. */
+  var VARIANTS = {
+    a: { dir: "assets/frames/", n: 300, cuts: [60, 120, 180, 240] },     // nido → huevo → mesa (5 clips con cortes duros)
+    b: { dir: "assets/frames-b/", n: 240, cuts: [],                       // un solo plano continuo: huevo → cáscara → yema → finca
+         poster: "assets/img/poster-b.jpg",
+         stills: ["assets/img/scene-b-1.jpg", "assets/img/scene-b-2.jpg", "assets/img/scene-b-3.jpg", "assets/img/scene-b-4.jpg", "assets/img/scene-b-5.jpg"],
+         captions: [["Origen", "Todo empieza con un huevo."], ["Cuidado", "Sostenido con cuidado."], ["Despertar", "Y de pronto, todo se abre."], ["Dentro", "Allí empieza la vida del día."], ["Finca", "Siempre se vuelve a la finca."]] }
+  };
+  var DEFAULT_VARIANT = "a";
+  var qv = /[?&]video=(\w+)/.exec(location.search);
+  var VAR = VARIANTS[(qv && qv[1]) || DEFAULT_VARIANT] || VARIANTS[DEFAULT_VARIANT];
+  var N = VAR.n, DIR = VAR.dir, CUTS = VAR.cuts;   // CUTS: índices donde empieza un clip nuevo (corte duro); vacío = plano continuo
   var SCENES = 5, MAX_W = 1920, CONC = 6;
 
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
@@ -30,6 +41,13 @@
     var cutEl = hero.querySelector(".hero__cut");
     var loading = document.getElementById("heroLoading");
     var stage = hero.querySelector(".hero__stage");
+
+    if (VAR.poster) { var po = hero.querySelector(".hero__poster"); if (po) po.src = VAR.poster; }
+    if (VAR.stills) for (var si = 0; si < scenes.length && si < VAR.stills.length; si++) scenes[si].src = VAR.stills[si];
+    if (VAR.captions) for (var ci = 0; ci < chapters.length && ci < VAR.captions.length; ci++) {
+      var cs = chapters[ci].querySelector("span"), cb = chapters[ci].querySelector("b");
+      if (cs) cs.textContent = VAR.captions[ci][0]; if (cb) cb.textContent = VAR.captions[ci][1];
+    }
 
     var mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     var conn = navigator.connection || {};
@@ -131,7 +149,7 @@
       endBtn.style.opacity = endOp;
       endBtn.style.visibility = endOp <= 0 ? "hidden" : "visible";
       bar.style.transform = "scaleX(" + p.toFixed(4) + ")";
-      var sc = p > 0.08 ? scene : -1;
+      var sc = p > 0.115 ? scene : -1;
       if (sc !== lastScene) {
         for (var i = 0; i < chapters.length; i++) chapters[i].classList.toggle("is-on", i === sc);
         lastScene = sc;

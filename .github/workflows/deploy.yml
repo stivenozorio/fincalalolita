@@ -22,7 +22,8 @@ jobs:
           mkdir out
           cp -r index.html css js assets admin out/
           test -f out/index.html || { echo "::error::falta out/index.html"; exit 1; }
-          test "$(ls out/assets/frames | wc -l)" -eq 300 || { echo "::error::faltan fotogramas"; exit 1; }
+          test "$(ls out/assets/frames | wc -l)" -eq 300 || { echo "::error::faltan fotogramas (video a)"; exit 1; }
+          test "$(ls out/assets/frames-b | wc -l)" -eq 240 || { echo "::error::faltan fotogramas (video b)"; exit 1; }
           grep -q "Cada huevo tiene una historia" out/index.html || { echo "::error::el home no trae su titular"; exit 1; }
           echo "Paquete listo: $(find out -type f | wc -l) archivos, $(du -sh out | cut -f1)"
 
