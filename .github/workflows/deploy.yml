@@ -40,10 +40,12 @@ jobs:
           FTP_HOST="digicyus.com"
           DEST="fincalalolita.digicyus.com/"
           case "$DEST" in ""|"/"|"."|"./") echo "::error::destino inseguro"; exit 1;; esac
+          # Subida INCREMENTAL: el mirror compara por tamaño (--ignore-time) y salta lo que no cambió (los fotogramas pesan ~16 MB);
+          # index.html, css, js y admin se suben siempre, porque un cambio de texto puede conservar el mismo tamaño.
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
           for attempt in 1 2 3; do
             if lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" \
-              -e "set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set net:reconnect-interval-base 5; mirror -R --verbose out/ ${DEST}; bye" \
+              -e "set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set net:reconnect-interval-base 5; mirror -R --verbose --ignore-time out/ ${DEST}; put -O ${DEST} out/index.html; mput -O ${DEST}css out/css/*; mput -O ${DEST}js out/js/*; mput -O ${DEST}admin out/admin/*; bye" \
               "${FTP_HOST}"; then
               exit 0
             fi
