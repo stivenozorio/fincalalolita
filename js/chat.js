@@ -61,7 +61,18 @@
   if (orderEl && "MutationObserver" in window) new MutationObserver(sync).observe(orderEl, { attributes: true, attributeFilter: ["hidden"] });
   sync();
 
-  // Globo de invitación, una sola vez por sesión
+  // Globo de invitación, una sola vez por sesión: aparece cuando la persona ya pasó el inicio (para no tapar el botón
+  // del inicio) o, si se queda quieta, a los 30 segundos.
   var seen = false; try { seen = sessionStorage.getItem("lolita.chat") === "1"; } catch (e) {}
-  if (!seen) setTimeout(function () { if (!open) { tease.hidden = false; setTimeout(function () { tease.hidden = true; }, 7000); } }, 6000);
+  if (!seen) {
+    var shown = false, nav = $("nav");
+    var showTease = function () {
+      if (shown || open) return; shown = true;
+      window.removeEventListener("scroll", onScroll); tease.hidden = false;
+      setTimeout(function () { tease.hidden = true; }, 7000);
+    };
+    var onScroll = function () { if (nav && nav.classList.contains("is-solid")) showTease(); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    setTimeout(showTease, 30000);
+  }
 })();

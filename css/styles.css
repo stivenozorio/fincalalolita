@@ -110,8 +110,8 @@ ul, ol { list-style: none; }
   .hero__shade { background: linear-gradient(180deg, rgba(43, 29, 20, .5) 0, transparent 18%, transparent 56%, var(--ink) 74%); }
   .hero__intro { bottom: clamp(60px, 9vh, 96px); }
   .hero__chapters { bottom: 138px; height: 9rem; }
-  .hero__end { left: var(--gutter); right: var(--gutter); bottom: 40px; }
-  .hero__intro .btn { width: 100%; }
+  .hero__end { left: var(--gutter); right: 92px; bottom: 40px; }
+  .hero__intro .btn { width: calc(100% - 66px); }
 }
 @media (prefers-reduced-motion: reduce) { .motes { display: none; } html { scroll-behavior: auto; } }
 .hero[data-mode="static"] { height: auto; }
