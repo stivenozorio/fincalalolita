@@ -398,3 +398,10 @@ body.no-scroll .chat { opacity: 0; pointer-events: none; }
 .chat__head { justify-content: flex-start; }
 .chat__head > div { flex: 1; }
 .chat__ico { width: 34px; height: auto; flex: none; }
+
+/* Logo principal arriba a la izquierda: grande en la parte alta de la página y compacto al bajar */
+.nav { align-items: center; }
+.nav__brand { margin-right: auto; display: block; line-height: 0; }
+.nav__logo { display: block; height: 80px; width: auto; transition: height .4s var(--ease); filter: drop-shadow(0 2px 16px rgba(0, 0, 0, .55)); }
+.nav.is-small .nav__logo, .nav.is-open .nav__logo { height: 54px; }
+@media (max-width: 860px) { .nav__logo { height: 64px; } .nav.is-small .nav__logo, .nav.is-open .nav__logo { height: 46px; } }

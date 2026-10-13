@@ -14,7 +14,10 @@
   $("navLinks").addEventListener("click", function (e) { if (e.target.tagName === "A") setMenu(false); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
   var heroEl = $("top");
-  function navState() { nav.classList.toggle("is-solid", heroEl.getBoundingClientRect().bottom < window.innerHeight * 0.6); }
+  function navState() {
+    nav.classList.toggle("is-solid", heroEl.getBoundingClientRect().bottom < window.innerHeight * 0.6);
+    nav.classList.toggle("is-small", window.scrollY > 60);
+  }
   window.addEventListener("scroll", navState, { passive: true }); navState();
   $("year").textContent = new Date().getFullYear();
   var waNum = O.normalizeNumber(CFG.whatsappNumber);
