@@ -20,14 +20,18 @@
   function waLink() { var n = O.normalizeNumber(CFG.whatsappNumber); return n ? "https://wa.me/" + n : null; }
 
   var QA = [
-    { q: "¿Cómo hago un pedido?", a: function () { return ["Eliges tus huevos, indicas cantidades, agregas observaciones y pulsas “Pedir por WhatsApp”. Se abre WhatsApp con tu pedido ya escrito: solo lo envías. Enviarlo es una solicitud; Dagoberto confirma contigo la disponibilidad y la entrega.", { href: "#products", label: "Ir a los productos" }]; } },
-    { q: "¿Qué productos hay?", a: function () {
-        var p = products();
-        if (!p.length) return ["Estamos preparando el catálogo con Dagoberto. Aparecerá en la sección de productos en cuanto esté confirmado.", { href: "#products", label: "Ver la sección" }];
-        return ["Por ahora: " + p.map(function (x) { return x.name.es; }).join(", ") + ".", { href: "#products", label: "Ver los productos" }]; } },
+    { q: "¿Cómo hago un pedido?", a: function () { return ["Eliges tus huevos o artesanías, indicas cantidades, agregas observaciones y pulsas “Pedir por WhatsApp”. Se abre WhatsApp con tu pedido ya escrito: solo lo envías. Enviarlo es una solicitud; Dagoberto confirma contigo la disponibilidad y la entrega.", { href: "#huevos", label: "Ir a los huevos" }]; } },
+    { q: "¿Qué huevos tienen?", a: function () {
+        var p = products().filter(function (x) { return (x.category || "huevos") === "huevos"; });
+        if (!p.length) return ["Estamos preparando los huevos con Dagoberto. Aparecerán en cuanto estén confirmados.", { href: "#huevos", label: "Ver la sección" }];
+        return ["Tenemos: " + p.map(function (x) { return x.name.es; }).join(", ") + ". La presentación y el precio los confirma Dagoberto.", { href: "#huevos", label: "Ver los huevos" }]; } },
+    { q: "¿Tienen artesanías?", a: function () {
+        var p = products().filter(function (x) { return x.category === "artesanias"; });
+        if (!p.length) return ["Estamos preparando las artesanías. Pronto verás aquí las piezas de la familia.", { href: "#artesanias", label: "Ver la sección" }];
+        return ["Sí: " + p.map(function (x) { return x.name.es; }).join(", ") + ". Dagoberto te confirma disponibilidad y precio por WhatsApp.", { href: "#artesanias", label: "Ver las artesanías" }]; } },
     { q: "¿Cuánto cuestan?", a: function () {
         var priced = products().some(function (p) { return (p.presentations || []).some(O.isPriced); });
-        return [priced ? "Los precios están en cada producto, en pesos colombianos. Tu total lo ves antes de enviar el pedido." : "Los precios se publicarán cuando Dagoberto los confirme. No mostramos precios que no estén confirmados.", { href: "#products", label: "Ir a los productos" }]; } },
+        return [priced ? "Los precios están en cada producto, en pesos colombianos. Tu total lo ves antes de enviar el pedido." : "Los precios se publicarán cuando Dagoberto los confirme. No mostramos precios que no estén confirmados.", { href: "#huevos", label: "Ir a los huevos" }]; } },
     { q: "¿Hacen domicilios?", a: function () { return [CFG.deliveryNote || "Todavía estamos confirmando hasta dónde repartimos. Dagoberto te dirá por WhatsApp si llega a tu zona."]; } },
     { q: "¿Cómo se paga?", a: function () { return [CFG.paymentNote || "Los medios de pago aún se están confirmando. Dagoberto te los indicará al coordinar tu pedido."]; } },
     { q: "Hablar con Dagoberto", a: function () {

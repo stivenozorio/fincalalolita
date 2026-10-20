@@ -332,9 +332,9 @@ body::after { content: ""; position: fixed; top: 0; right: 0; bottom: 0; left: 0
 .hen--walk { left: 0; bottom: -4px; width: clamp(78px, 11vw, 130px); will-change: translate; }
 
 /* Productos: más atmósfera */
-#products { overflow: hidden; background: radial-gradient(70% 55% at 88% 0%, rgba(230, 185, 79, .2), transparent 62%), radial-gradient(55% 45% at 0% 100%, rgba(117, 69, 43, .1), transparent 62%), var(--paper); }
-#products::after { content: ""; position: absolute; right: -7%; top: 10%; width: 36vw; max-width: 460px; aspect-ratio: 3 / 4; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; border: 1px solid rgba(117, 69, 43, .14); pointer-events: none; }
-#products .wrap { position: relative; z-index: 1; }
+#huevos { overflow: hidden; background: radial-gradient(70% 55% at 88% 0%, rgba(230, 185, 79, .2), transparent 62%), radial-gradient(55% 45% at 0% 100%, rgba(117, 69, 43, .1), transparent 62%), var(--paper); }
+#huevos::after { content: ""; position: absolute; right: -7%; top: 10%; width: 36vw; max-width: 460px; aspect-ratio: 3 / 4; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; border: 1px solid rgba(117, 69, 43, .14); pointer-events: none; }
+#huevos .wrap { position: relative; z-index: 1; }
 .perks { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.6rem; }
 .perks li { padding: .55rem 1.05rem; border-radius: 999px; background: #fff; border: 1px solid var(--line-light); font: 500 .82rem var(--sans); color: var(--earth); }
 .perks li::before { content: "✦"; margin-right: .55em; color: var(--gold); }
@@ -413,3 +413,68 @@ body.no-scroll .chat { opacity: 0; pointer-events: none; }
 .egg.is-live .egg__canvas { opacity: 1; }
 .story { padding-top: clamp(120px, 19vw, 270px); }
 .ghost { top: 2%; font-size: clamp(5rem, 17vw, 16rem); }
+
+
+/* ===== Huevos y Artesanías ===== */
+/* La barra del pedido es global (fija abajo): sirve para huevos y artesanías */
+.order { position: fixed; left: 0; right: 0; bottom: 0; margin: 0 auto; z-index: 40; }
+.edge-up::before { top: -37px; transform: scaleY(-1); }
+.catalog-empty--dark { background: rgba(247, 240, 226, .05); border: 1px solid var(--line-dark); color: var(--cream); }
+.catalog-empty--dark p { color: var(--ink-soft); }
+.catalog-empty--dark h3 { color: var(--paper); }
+
+/* Fotos que se pueden ampliar */
+.prod__zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; line-height: 0; }
+.prod__zoom img { width: 100%; height: auto; display: block; transition: transform .6s var(--ease); }
+.prod:hover .prod__zoom img { transform: scale(1.03); }
+.prod__media--carousel { aspect-ratio: auto; display: block; }
+
+/* Carrusel de fotos (huevos) */
+.carousel { position: relative; aspect-ratio: 1 / 1; overflow: hidden; background: var(--cream); }
+.carousel__track { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.carousel__track::-webkit-scrollbar { display: none; }
+.carousel__slide { flex: 0 0 100%; scroll-snap-align: center; padding: 0; border: 0; background: none; cursor: zoom-in; line-height: 0; }
+.carousel__slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.carousel__nav { position: absolute; top: 50%; translate: 0 -50%; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(43, 29, 20, .62); color: var(--cream); font-size: 1.6rem; line-height: 1; cursor: pointer; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.carousel__nav--prev { left: 12px; } .carousel__nav--next { right: 12px; }
+.carousel__dots { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; justify-content: center; gap: 8px; }
+.carousel__dot { width: 9px; height: 9px; padding: 0; border-radius: 50%; border: 0; background: rgba(255, 253, 248, .55); cursor: pointer; box-shadow: 0 1px 4px rgba(0, 0, 0, .35); }
+.carousel__dot.is-on { background: var(--gold); width: 22px; border-radius: 6px; transition: width .3s var(--ease); }
+@media (hover: none) { .carousel__nav { display: none; } }
+
+/* Huevos: tarjeta destacada (foto grande + pedido) */
+.catalog--feature { grid-template-columns: 1fr; }
+.catalog--feature .prod { max-width: 1040px; }
+@media (min-width: 900px) {
+  .catalog--feature .prod { display: grid; grid-template-columns: 1.15fr 1fr; align-items: stretch; }
+  .catalog--feature .prod__body { justify-content: center; padding: 2.2rem; gap: 1rem; }
+  .catalog--feature .prod h3 { font-size: 2rem; }
+}
+
+/* Artesanías: galería en columnas, cada foto conserva su proporción */
+.shop--dark { background: radial-gradient(60% 45% at 10% 0%, rgba(230, 185, 79, .12), transparent 60%), var(--ink); overflow: hidden; }
+.gallery { column-count: 1; column-gap: 1.25rem; margin-top: 3rem; padding-bottom: 3rem; }
+@media (min-width: 640px) { .gallery { column-count: 2; } }
+@media (min-width: 1000px) { .gallery { column-count: 3; } }
+.gallery .prod { display: block; break-inside: avoid; margin-bottom: 1.25rem; }
+.gallery .prod__media { aspect-ratio: auto; display: block; background: #241811; }
+.shop--dark .prod { background: rgba(247, 240, 226, .06); border-color: var(--line-dark); color: var(--cream); }
+.shop--dark .prod:hover { box-shadow: 0 28px 60px rgba(0, 0, 0, .5); }
+.shop--dark .prod h3 { color: var(--paper); }
+.shop--dark .prod__desc { color: var(--ink-soft); }
+.shop--dark .pres { border-top-color: var(--line-dark); }
+.shop--dark .pres__info b { color: var(--gold); }
+.shop--dark .pres__info b.tbc { color: var(--ink-soft); }
+.shop--dark .pres__info span { color: var(--ink-soft); }
+.shop--dark .qty { background: rgba(247, 240, 226, .1); }
+.shop--dark .qty button { background: rgba(247, 240, 226, .16); color: var(--cream); }
+.shop--dark .qty button:active { background: var(--gold); color: var(--ink); }
+.shop--dark .qty output { color: var(--cream); }
+
+/* Foto ampliada */
+.lightbox { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .9rem; padding: 4.5rem 1rem 2rem; background: rgba(14, 8, 4, .94); }
+.lightbox img { max-width: min(94vw, 1100px); max-height: 78vh; width: auto; height: auto; object-fit: contain; border-radius: 10px; box-shadow: 0 30px 90px rgba(0, 0, 0, .6); }
+.lightbox p { margin: 0; color: var(--ink-soft); font-size: .92rem; text-align: center; }
+.lightbox__close { position: absolute; top: max(14px, env(safe-area-inset-top)); right: 14px; width: 48px; height: 48px; border-radius: 50%; border: 0; background: rgba(247, 240, 226, .14); color: var(--cream); font-size: 1.8rem; line-height: 1; cursor: pointer; }
+
+body.order-open .chat { opacity: 0; pointer-events: none; }
