@@ -166,5 +166,6 @@
   });
   $("orderNotes").addEventListener("input", renderOrder);
   I.onChange(renderCatalog);
+  window.LolitaApp = { refresh: renderCatalog };
   I.apply();
 })();

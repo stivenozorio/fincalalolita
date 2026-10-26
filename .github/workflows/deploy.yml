@@ -20,7 +20,10 @@ jobs:
         run: |
           set -euo pipefail
           mkdir out
-          cp -r index.html css js assets admin out/
+          cp -r index.html css js assets admin api panel out/
+          for f in $(find api panel tests -name '*.php'); do php -l "$f" >/dev/null || { echo "::error::error de sintaxis en $f"; exit 1; }; done
+          php tests/price.test.php
+          test ! -e out/data || { echo "::error::data/ nunca debe viajar en el paquete"; exit 1; }
           test -f out/index.html || { echo "::error::falta out/index.html"; exit 1; }
           test "$(ls out/assets/frames | wc -l)" -eq 300 || { echo "::error::faltan fotogramas (video a)"; exit 1; }
           test "$(ls out/assets/frames-b | wc -l)" -eq 240 || { echo "::error::faltan fotogramas (video b)"; exit 1; }
@@ -41,11 +44,11 @@ jobs:
           DEST="fincalalolita.digicyus.com/"
           case "$DEST" in ""|"/"|"."|"./") echo "::error::destino inseguro"; exit 1;; esac
           # Subida INCREMENTAL: el mirror compara por tamaño (--ignore-time) y salta lo que no cambió (los fotogramas pesan ~16 MB);
-          # index.html, css, js y admin se suben siempre, porque un cambio de texto puede conservar el mismo tamaño.
+          # index.html, css, js, admin, api y panel se suben siempre, porque un cambio de texto puede conservar el mismo tamaño.
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
           for attempt in 1 2 3; do
             if lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" \
-              -e "set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set net:reconnect-interval-base 5; mirror -R --verbose --ignore-time out/ ${DEST}; put -O ${DEST} out/index.html; mput -O ${DEST}css out/css/*; mput -O ${DEST}js out/js/*; mput -O ${DEST}admin out/admin/*; bye" \
+              -e "set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set net:reconnect-interval-base 5; mirror -R --verbose --ignore-time out/ ${DEST}; put -O ${DEST} out/index.html; mput -O ${DEST}css out/css/*; mput -O ${DEST}js out/js/*; mput -O ${DEST}admin out/admin/*; mput -O ${DEST}api out/api/*; mput -O ${DEST}panel out/panel/*; bye" \
               "${FTP_HOST}"; then
               exit 0
             fi
@@ -66,3 +69,21 @@ jobs:
             sleep 20
           done
           echo "::warning::No se pudo conectar al sitio desde el runner; la subida terminó bien pero queda sin comprobar."
+
+      - name: Verificar precio y protección de datos
+        run: |
+          set -uo pipefail
+          B=https://fincalalolita.digicyus.com
+          fail=0
+          code() { curl -s -o /dev/null -w '%{http_code}' --connect-timeout 20 --max-time 40 "$1"; }
+          for attempt in 1 2 3; do
+            curl -sS --connect-timeout 20 --max-time 40 "$B/api/price.php" -o price.json && grep -q '"ok":true' price.json && break
+            sleep 10
+          done
+          grep -q '"ok":true' price.json && echo "API de precio: OK -> $(head -c 160 price.json)" || { echo "::error::api/price.php no responde con datos"; fail=1; }
+          for u in data/prices.json data/auth.php data/attempts.php api/lib.php; do
+            c=$(code "$B/$u"); echo "$u -> $c"
+            case "$c" in 403|404) ;; *) echo "::error::$u no debería ser accesible ($c)"; fail=1;; esac
+          done
+          c=$(code "$B/panel/"); echo "panel/ -> $c"; [ "$c" = "200" ] || { echo "::error::el panel no abre ($c)"; fail=1; }
+          exit $fail

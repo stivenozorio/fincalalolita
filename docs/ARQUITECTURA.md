@@ -8,7 +8,12 @@ HTML + CSS + JS sin compilación (el repositorio estaba vacío; no se agregó fr
 - `js/scroll-frames.js` — hero cinematográfico: el scroll controla una secuencia de 300 fotogramas WebP dibujados en `<canvas>` (carga progresiva, mezcla entre fotogramas, fallback a fotos fijas).
 - `js/farm.js` — escena ilustrada de la finca al amanecer (scroll), gallinas SVG y partículas.
 - `assets/frames/` — 300 fotogramas (12 fps, 1152 px, reescalado Lanczos, limpieza temporal de grano y afilado suave, ~9 MB) extraídos del video de referencia. Se usa canvas y no `<video>` porque Safari/iOS retrasa los seeks de `currentTime` y no carga video sin gesto del usuario.
-- `admin/index.html` — solo diseño de referencia, **sin funciones**.
+- `admin/index.html` — solo redirige a `/panel/`.
+- `api/price.php` + `api/lib.php` — precio de la cubeta con historial y variación (PHP, archivos en `data/`, sin base de datos).
+- `panel/` — panel privado (usuario y contraseña) para registrar el precio de la cubeta. La cuenta se crea una sola vez con un código de activación (en el repo solo está su huella SHA-256).
+- `js/price.js` — tarjeta pública con precio, flecha sube/baja, variación en pesos y %, gráfico e historial; además alimenta el precio de "Huevos de gallina" en el pedido.
+- `data/` — se crea en el servidor, está protegida por `.htaccess`, NO está en el repositorio y el despliegue nunca la toca. Para respaldar: copiar esa carpeta.
+- Pruebas: `php tests/price.test.php` y `node tests/order.test.mjs`.
 
 ## Panel de administración: qué falta
 No hay backend ni base de datos. Un panel real necesita:

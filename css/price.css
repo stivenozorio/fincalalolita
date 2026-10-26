@@ -1,0 +1,28 @@
+/* ===== Indicador del precio de la cubeta ===== */
+.pcard { --up: #1f7a45; --down: #b3361f; --same: #75452B; margin-top: 2rem; padding: clamp(18px, 3vw, 30px); border-radius: 22px; background: var(--cream); border: 1px solid var(--line-light); max-width: 760px; }
+.pcard__top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.pcard__label { font: 600 .74rem var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--earth); }
+.pcard__price { font: 400 clamp(2.6rem, 8vw, 4rem) / 1.05 var(--serif); color: var(--ink); margin-top: .25rem; }
+.pcard__price small { display: block; font: 500 .85rem var(--sans); color: rgba(43, 29, 20, .6); letter-spacing: .02em; }
+.pcard__date { font: 500 .85rem var(--sans); color: rgba(43, 29, 20, .68); margin-top: .35rem; }
+.pbadge { flex: none; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-size: 1.7rem; color: #fff; background: var(--same); }
+.pbadge.is-up { background: var(--up); } .pbadge.is-down { background: var(--down); } .pbadge.is-first { background: var(--earth); }
+.pcard__var { margin-top: 1rem; font: 500 .98rem var(--sans); color: var(--ink); }
+.pcard__var.is-up b, .pv.is-up { color: var(--up); } .pcard__var.is-down b, .pv.is-down { color: var(--down); } .pv.is-same, .pv.is-first { color: rgba(43, 29, 20, .6); }
+.pchart { margin-top: 1.1rem; background: var(--paper); border: 1px solid var(--line-light); border-radius: 16px; padding: .6rem .4rem .2rem; }
+.pchart__svg { width: 100%; height: auto; display: block; }
+.pchart__grid { stroke: rgba(43, 29, 20, .1); stroke-width: 1; }
+.pchart__ytick, .pchart__xtick { font: 500 13px var(--sans); fill: rgba(43, 29, 20, .6); }
+.pchart__line { fill: none; stroke: var(--earth); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.pchart__area { fill: rgba(230, 185, 79, .2); stroke: none; }
+.pchart__dot { stroke: var(--paper); stroke-width: 2; fill: var(--same); }
+.pchart__dot.is-up { fill: var(--up); } .pchart__dot.is-down { fill: var(--down); } .pchart__dot.is-first { fill: var(--earth); }
+.pchart__legend { display: flex; gap: 1rem; justify-content: center; margin-top: .6rem; font: 600 .78rem var(--sans); }
+.pchart__legend span::before { content: ""; display: inline-block; width: .7em; height: .7em; border-radius: 50%; margin-right: .4em; background: currentColor; }
+.pchart__legend .is-up { color: var(--up); } .pchart__legend .is-down { color: var(--down); } .pchart__legend .is-same { color: var(--same); }
+.pdet { margin-top: 1rem; } .pdet summary { cursor: pointer; font: 600 .9rem var(--sans); color: var(--earth); padding: .5rem 0; }
+.phist { overflow-x: auto; } .phist__table { width: 100%; border-collapse: collapse; font: 500 .85rem var(--sans); min-width: 440px; }
+.phist__table th, .phist__table td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line-light); } .phist__table th { font-weight: 700; color: var(--earth); }
+.pcard__note { margin-top: 1rem; font: 400 .8rem var(--sans); color: rgba(43, 29, 20, .62); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+

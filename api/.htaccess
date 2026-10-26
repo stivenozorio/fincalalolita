@@ -1,0 +1,5 @@
+# Solo price.php es público; lib.php nunca se sirve directamente.
+<Files "lib.php">
+  Require all denied
+</Files>
+Options -Indexes
