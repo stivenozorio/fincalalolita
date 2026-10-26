@@ -1,0 +1,48 @@
+# Prueba TEMPORAL y segura del hosting: sube un archivo PHP de diagnóstico, lo consulta y lo borra.
+# No toca ningún archivo del sitio. Muestra: versión de PHP, extensiones, si puede escribir y si respeta .htaccess.
+name: Probe hosting (temporal)
+on:
+  workflow_dispatch: {}
+concurrency:
+  group: deploy-godaddy
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Subir, consultar y borrar la prueba
+        env:
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -uo pipefail
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          ID="$(head -c 6 /dev/urandom | od -An -tx1 | tr -d ' \n')"
+          mkdir -p /tmp/probe
+          cat > /tmp/probe/p.php <<'PHP'
+          <?php
+          header('Content-Type: application/json');
+          $dir = __DIR__ . '/probe-data-' . basename(__FILE__, '.php');
+          $mk = is_dir($dir) || @mkdir($dir, 0755);
+          @file_put_contents($dir . '/.htaccess', "Require all denied\n<IfModule !mod_authz_core.c>\nDeny from all\n</IfModule>\n");
+          $wr = @file_put_contents($dir . '/secret.txt', 'hola') !== false;
+          echo json_encode([
+            'php' => PHP_VERSION, 'sapi' => PHP_SAPI, 'server' => isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : null,
+            'ext' => ['json' => extension_loaded('json'), 'session' => extension_loaded('session'), 'openssl' => extension_loaded('openssl'), 'mbstring' => extension_loaded('mbstring')],
+            'password_hash' => function_exists('password_hash'), 'random_bytes' => function_exists('random_bytes'),
+            'dir_writable' => is_writable(__DIR__), 'mkdir_ok' => $mk, 'file_write_ok' => $wr,
+            'https' => !empty($_SERVER['HTTPS']), 'session_save_path' => session_save_path(), 'tz' => date_default_timezone_get(),
+            'open_basedir' => ini_get('open_basedir'), 'disable_functions' => ini_get('disable_functions'), 'time' => date('c'),
+          ], JSON_PRETTY_PRINT);
+          PHP
+          sed -i 's/^          //' /tmp/probe/p.php
+          lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" -e "set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set net:timeout 20; put -O fincalalolita.digicyus.com/ /tmp/probe/p.php -o probe-$ID.php; bye" digicyus.com
+          sleep 5
+          URL="https://fincalalolita.digicyus.com"
+          echo "=== Respuesta del PHP de prueba ==="
+          curl -sS --max-time 40 "$URL/probe-$ID.php" || echo "(no respondió)"
+          echo
+          echo "=== ¿Se puede leer un archivo de una carpeta protegida con .htaccess? (esperado: 403 o 404) ==="
+          curl -s -o /dev/null -w "HTTP %{http_code}\n" --max-time 40 "$URL/probe-data-probe-$ID/secret.txt"
+          echo "=== Limpieza ==="
+          lftp -u "${FTP_USERNAME},${FTP_PASSWORD}" -e "set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set net:timeout 20; cd fincalalolita.digicyus.com; rm probe-$ID.php; rm -r probe-data-probe-$ID; ls; bye" digicyus.com | grep -c probe | sed 's/^/archivos de prueba que quedan: /'
