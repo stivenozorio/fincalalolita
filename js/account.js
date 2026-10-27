@@ -7,7 +7,7 @@
   var sb = SB.client, el = SB.el, cop = SB.cop;
   var EGG_KEY = "huevos-gallina::p1";
 
-  var S = { session: null, profile: null, zonas: [], locs: [], franjas: [], ajustes: {}, puntos: 0, pedidos: [], lines: [], total: null, busy: false,
+  var S = { tab: "", session: null, profile: null, zonas: [], locs: [], franjas: [], ajustes: {}, puntos: 0, pedidos: [], lines: [], total: null, busy: false,
             entrega: "programado", fecha: "", franja: "", ok: null };
   var $ = function (id) { return document.getElementById(id); };
 
@@ -47,7 +47,7 @@
       return Promise.all([
         sb.from("perfiles").select("*").eq("id", uid).maybeSingle(),
         sb.rpc("saldo_puntos"),
-        sb.from("pedidos").select("*").order("creado_en", { ascending: false }).limit(10)
+        sb.from("pedidos").select("*").order("creado_en", { ascending: false }).limit(30)
       ]).then(function (r2) { S.profile = r2[0].data; S.puntos = r2[1].data || 0; S.pedidos = r2[2].data || []; });
     }).catch(function () {});
   }
@@ -145,20 +145,34 @@
         refresh().then(function () { if (complete()) { closeModal(); location.hash = "#huevos"; } });
       });
     } }, [field("Tu nombre completo", nombre), field("Tu celular", tel), field("Dirección de entrega", dir), field("Localidad", loc, "Si no aparece tu zona con domicilio confirmado, escríbenos por WhatsApp."), field("Indicaciones para el domicilio (opcional)", ind), consent, msgBox, btn]);
-    body.appendChild(form);
+    var datos = el("div", { class: "acct__tabpane" }, [form]);
+    body.appendChild(datos);
 
-    if (complete() && S.pedidos.length) {
-      body.appendChild(el("h3", { text: "Mis pedidos" }));
-      var ul = el("ul", { class: "acct__orders" });
-      var ESTADO = { nuevo: "Enviado", confirmado: "Confirmado", entregado: "Entregado", cancelado: "Cancelado" };
-      S.pedidos.forEach(function (o) {
-        ul.appendChild(el("li", {}, [
-          el("div", {}, [el("b", { text: o.cubetas + (o.cubetas === 1 ? " cubeta" : " cubetas") + " · " + cop(o.total) }), el("small", { text: "Para el " + fechaLarga(o.entrega_fecha) + " · " + (ESTADO[o.estado] || o.estado) })]),
-          el("button", { class: "acct__ghost", type: "button", text: "Pedir otra vez", onclick: function () { closeModal(); APP.setQty(EGG_KEY, o.cubetas); location.hash = "#huevos"; } })
-        ]));
-      });
-      body.appendChild(ul);
+    var pedidosBox = el("div", { class: "acct__tabpane" });
+    if (complete()) {
+      var ESTADO = { nuevo: "Enviado, esperando confirmación", confirmado: "Confirmado", entregado: "Entregado", cancelado: "Cancelado" };
+      if (!S.pedidos.length) {
+        pedidosBox.appendChild(el("p", { class: "acct__lead", text: "Todavía no has hecho pedidos. Cuando hagas uno, aquí verás su estado y tus puntos." }));
+        pedidosBox.appendChild(el("button", { class: "acct__primary", type: "button", text: "Hacer mi primer pedido", onclick: function () { closeModal(); location.hash = "#huevos"; } }));
+      } else {
+        var ul = el("ul", { class: "acct__orders" });
+        S.pedidos.forEach(function (o) {
+          var pts = o.estado === "entregado" ? " · +" + (o.cubetas * Number(S.ajustes.puntos_por_cubeta || 5)) + " puntos" : "";
+          ul.appendChild(el("li", {}, [
+            el("div", {}, [el("b", { text: "Pedido N.º " + o.id + " · " + o.cubetas + (o.cubetas === 1 ? " cubeta" : " cubetas") + " · " + cop(o.total) }),
+              el("small", { text: "Para el " + fechaLarga(o.entrega_fecha) }), el("span", { class: "acct__st is-" + o.estado, text: (ESTADO[o.estado] || o.estado) + pts })]),
+            el("button", { class: "acct__ghost", type: "button", text: "Pedir otra vez", onclick: function () { closeModal(); APP.setQty(EGG_KEY, o.cubetas); location.hash = "#huevos"; } })
+          ]));
+        });
+        pedidosBox.appendChild(ul);
+      }
+      var tabs = el("div", { class: "acct__tabs", role: "group", "aria-label": "Secciones de mi cuenta" });
+      var show = function (t) { S.tab = t; datos.hidden = t !== "datos"; pedidosBox.hidden = t !== "pedidos"; Array.prototype.forEach.call(tabs.children, function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-t") === t)); }); };
+      [["pedidos", "Mis pedidos"], ["datos", "Mis datos"]].forEach(function (t) { tabs.appendChild(el("button", { type: "button", "data-t": t[0], text: t[1], onclick: function () { show(t[0]); } })); });
+      body.insertBefore(tabs, datos); body.insertBefore(pedidosBox, datos);
+      show(S.tab === "datos" ? "datos" : "pedidos");
     }
+
     var links = el("div", { class: "acct__links" });
     links.appendChild(el("button", { class: "acct__ghost", type: "button", text: "Cerrar sesión", onclick: function () { sb.auth.signOut().then(function () { closeModal(); return refresh(); }); } }));
     body.appendChild(links);

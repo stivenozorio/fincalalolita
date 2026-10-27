@@ -69,3 +69,10 @@
 @media (max-width: 640px) { .nav__admin .l-long { display: none; } .nav__admin .l-short { display: inline; } .nav__brand { flex: none; } .nav__logo { min-width: 64px; } }
 .nav__toggle { flex: none; }
 @media (max-width: 520px) { .nav__acct, .nav__admin { padding: 0 .7rem; font-size: .82rem; min-height: 40px; } .nav__logo { max-width: 78px; height: auto; } }
+
+.acct__tabs { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin: 0 0 1.2rem; }
+.acct__tabs button { min-height: 54px; border-radius: 14px; border: 2px solid var(--earth); background: transparent; color: var(--earth); font: 700 1.1rem var(--sans); cursor: pointer; }
+.acct__tabs button[aria-pressed="true"] { background: var(--earth); color: #fff; }
+.acct__tabpane[hidden] { display: none; }
+.acct__st { display: inline-block; margin-top: .25rem; padding: .2rem .7rem; border-radius: 999px; font: 700 .95rem var(--sans); background: #eee3cf; color: var(--earth); justify-self: start; }
+.acct__st.is-entregado { background: #dff3e6; color: #17603a; } .acct__st.is-cancelado { background: #fbe1da; color: #8f2a15; } .acct__st.is-confirmado { background: #fff4d6; color: #7a5200; }
