@@ -1,0 +1,29 @@
+# Aviso semanal: consulta pública de solo lectura a Supabase para que el plan gratuito no pause el proyecto por inactividad.
+# No usa secretos: la llave publishable es pública y está en js/config.js. Si Supabase no responde, la tarea falla y GitHub avisa por correo.
+name: Mantener Supabase activo
+on:
+  schedule:
+    - cron: "17 14 * * 1"   # lunes, 9:17 a. m. hora de Colombia
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Consultar el precio de la cubeta
+        run: |
+          set -euo pipefail
+          URL=$(grep -o 'https://[a-z0-9]*\.supabase\.co' js/config.js | head -1)
+          KEY=$(grep -o 'sb_publishable_[A-Za-z0-9_-]*' js/config.js | head -1)
+          test -n "$URL" && test -n "$KEY" || { echo "::error::no se encontró la configuración de Supabase"; exit 1; }
+          for attempt in 1 2 3; do
+            if curl -sSf --connect-timeout 20 --max-time 40 -H "apikey: $KEY" "$URL/rest/v1/precios_historial?select=precio&limit=1" -o out.json && grep -q '"precio"' out.json; then
+              echo "Supabase activo: $(head -c 120 out.json)"; exit 0
+            fi
+            sleep 15
+          done
+          echo "::error::Supabase no respondió (¿proyecto pausado?). Entra a supabase.com y revisa el proyecto."; exit 1
