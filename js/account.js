@@ -35,8 +35,7 @@
   function addDays(iso, n) { var d = new Date(iso + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
   var MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
   function fechaLarga(iso) { var p = iso.split("-"); return Number(p[2]) + " de " + MESES[Number(p[1]) - 1]; }
-  function hoyDisponible() { var lim = (S.ajustes.hora_limite_hoy || "10:00").slice(0, 5); return bogota().time <= lim; }
-  function limiteTexto() { var l = (S.ajustes.hora_limite_hoy || "10:00").slice(0, 5).split(":"), h = Number(l[0]); return (h % 12 || 12) + ":" + l[1] + (h < 12 ? " a. m." : " p. m."); }
+  function hoyDisponible() { return true; }               // se puede pedir las 24 horas
 
   /* ---------- Sesión y perfil ---------- */
   function loadUser() {
@@ -235,7 +234,7 @@
     var opts = el("div", { class: "deliv__opts", role: "radiogroup", "aria-label": "Cuándo recibir el pedido" });
     var hoyOk = hoyDisponible();
     if (S.entrega === "hoy" && !hoyOk) S.entrega = "programado";
-    [["hoy", "Hoy mismo", hoyOk ? "Pídelo antes de las " + limiteTexto() : "Ya pasó la hora de hoy (" + limiteTexto() + ")"], ["programado", "Otro día", "Tú eliges fecha y horario"]].forEach(function (o) {
+    [["hoy", "Hoy mismo", "Lo llevamos lo antes posible hoy"], ["programado", "Otro día", "Tú eliges fecha y horario"]].forEach(function (o) {
       var dis = o[0] === "hoy" && !hoyOk;
       var inp = el("input", { type: "radio", name: "entrega", value: o[0], checked: S.entrega === o[0], disabled: dis, onchange: function () { S.entrega = o[0]; paintDelivery(); } });
       opts.appendChild(el("label", { class: "deliv__opt" + (dis ? " is-off" : "") }, [inp, el("span", {}, [el("b", { text: o[1] }), el("small", { text: o[2] })])]));

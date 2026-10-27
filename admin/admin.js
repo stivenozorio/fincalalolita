@@ -114,15 +114,14 @@
 
   /* ---------- Horarios ---------- */
   function vHorarios(D) {
-    var nodes = [], lim = el("input", { type: "time", value: (D.ajustes.hora_limite_hoy || "10:00").slice(0, 5) });
+    var nodes = [];
     var pts = el("input", { inputmode: "numeric", value: D.ajustes.puntos_por_cubeta || "5" });
     var b1 = el("button", { class: "btn", type: "button", text: "Guardar", onclick: function () {
       var n = parseInt(pts.value.replace(/[^0-9]/g, ""), 10); if (isNaN(n) || n > 1000) return alert("Los puntos deben ser un número, por ejemplo 5.");
-      if (!lim.value) return alert("Elige la hora límite.");
       b1.disabled = true;
-      Promise.all([sb.from("ajustes").update({ valor: lim.value }).eq("clave", "hora_limite_hoy"), sb.from("ajustes").update({ valor: String(n) }).eq("clave", "puntos_por_cubeta")]).then(function (r) { r.some(bad) ? (alert(bad(r[0]) || bad(r[1])), b1.disabled = false) : reload("Guardado."); });
+      sb.from("ajustes").update({ valor: String(n) }).eq("clave", "puntos_por_cubeta").then(function (r) { bad(r) ? (alert(bad(r)), b1.disabled = false) : reload("Guardado."); });
     } });
-    nodes.push(el("div", { class: "ad__card" }, [el("h2", { text: "Pedidos para hoy y puntos" }), field("Hora límite para pedidos “para hoy”", lim), field("Puntos por cada cubeta entregada", pts), b1]));
+    nodes.push(el("div", { class: "ad__card" }, [el("h2", { text: "Puntos" }), el("p", { class: "ad__lead", text: "Los clientes pueden pedir las 24 horas." }), field("Puntos por cada cubeta entregada", pts), b1]));
     var fr = el("div", { class: "ad__card" }, [el("h2", { text: "Horarios de entrega" }), el("p", { class: "ad__lead", text: "El cliente elige uno de estos horarios cuando pide para otro día." })]);
     D.franjas.forEach(function (f) {
       var nom = el("input", { value: f.nombre, maxlength: "60" }), act = el("input", { type: "checkbox", checked: f.activa, id: "fr" + f.id });

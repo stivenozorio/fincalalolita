@@ -8,8 +8,7 @@ create table if not exists public.ajustes (
   valor text not null
 );
 insert into public.ajustes (clave, valor) values
-  ('puntos_por_cubeta', '5'),
-  ('hora_limite_hoy',   '10:00')      -- pedidos "para hoy" hasta esta hora (hora de Bogotá)
+  ('puntos_por_cubeta', '5')
 on conflict (clave) do nothing;
 
 -- ============ Zonas de envío y localidades ============
@@ -154,8 +153,6 @@ declare
   v_precio integer;
   v_envio integer;
   v_zona smallint;
-  limite time;
-  ahora timestamp := (now() at time zone 'America/Bogota');
   hoy date := (now() at time zone 'America/Bogota')::date;
   fecha date;
   fila public.pedidos;
@@ -171,9 +168,7 @@ begin
   if v_zona is null then raise exception 'Todavía no confirmamos el domicilio para tu localidad. Escríbenos por WhatsApp.'; end if;
   select costo into v_envio from public.zonas_envio where id = v_zona;
   if p_entrega = 'hoy' then
-    select valor::time into limite from public.ajustes where clave = 'hora_limite_hoy';
-    if ahora::time > coalesce(limite, '10:00'::time) then raise exception 'Ya pasó la hora para pedidos de hoy. Elige otro día.'; end if;
-    fecha := hoy;
+    fecha := hoy;                              -- se puede pedir las 24 horas, todos los días
   elsif p_entrega = 'programado' then
     if p_fecha is null or p_fecha <= hoy or p_fecha > hoy + 30 then raise exception 'Elige una fecha desde mañana y dentro de los próximos 30 días.'; end if;
     if not exists (select 1 from public.franjas where id = p_franja and activa) then raise exception 'Elige un horario de entrega.'; end if;
@@ -202,7 +197,7 @@ drop policy if exists lee_precios on public.precios_cubeta;      create policy l
 drop policy if exists lee_zonas on public.zonas_envio;           create policy lee_zonas        on public.zonas_envio    for select using (true);
 drop policy if exists lee_localidades on public.localidades;     create policy lee_localidades  on public.localidades    for select using (true);
 drop policy if exists lee_franjas on public.franjas;             create policy lee_franjas      on public.franjas        for select using (true);
-drop policy if exists lee_ajustes on public.ajustes;             create policy lee_ajustes      on public.ajustes        for select using (clave in ('puntos_por_cubeta', 'hora_limite_hoy'));
+drop policy if exists lee_ajustes on public.ajustes;             create policy lee_ajustes      on public.ajustes        for select using (clave in ('puntos_por_cubeta'));
 
 -- Solo el administrador cambia precios, zonas, localidades, horarios y ajustes
 drop policy if exists admin_precios on public.precios_cubeta;    create policy admin_precios    on public.precios_cubeta for insert with check (public.es_admin());
