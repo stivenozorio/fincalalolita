@@ -7,5 +7,9 @@ window.LOLITA_CONFIG = {
   deliveryNote: null,                 // PENDIENTE: zonas de reparto confirmadas (texto corto)
   paymentNote: null,                  // PENDIENTE: medios de pago confirmados (texto corto)
   instagramUrl: null,                 // PENDIENTE
-  facebookUrl: null                   // PENDIENTE
+  facebookUrl: null,                  // PENDIENTE
+  // Supabase: estos dos datos son PÚBLICOS por diseño (la seguridad la dan las reglas RLS de supabase/schema.sql).
+  // La llave "secret"/"service_role" NUNCA va aquí ni en el repositorio.
+  supabaseUrl: "https://fubrfxmgtugrtuckcucf.supabase.co",
+  supabaseKey: "sb_publishable_I7s5h9B3LCvkmT9D56hoyw_vwAvr5u7"
 };
