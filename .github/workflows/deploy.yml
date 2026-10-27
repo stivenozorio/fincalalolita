@@ -20,7 +20,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir out
-          cp -r index.html css js assets admin api panel out/
+          cp -r index.html css js assets admin api panel privacidad out/
           for f in $(find api panel tests -name '*.php'); do php -l "$f" >/dev/null || { echo "::error::error de sintaxis en $f"; exit 1; }; done
           test ! -e out/data || { echo "::error::data/ nunca debe viajar en el paquete"; exit 1; }
           test -f out/index.html || { echo "::error::falta out/index.html"; exit 1; }
@@ -87,5 +87,6 @@ jobs:
             c=$(code "$B/$u"); echo "$u -> $c"
             case "$c" in 403|404) ;; *) echo "::error::$u no debería ser accesible ($c)"; fail=1;; esac
           done
+          c=$(code "$B/privacidad/"); echo "privacidad/ -> $c"; [ "$c" = "200" ] || { echo "::error::falta la página de privacidad ($c)"; fail=1; }
           c=$(code "$B/admin/"); echo "admin/ -> $c"; [ "$c" = "200" ] || { echo "::error::el panel /admin/ no abre ($c)"; fail=1; }
           exit $fail

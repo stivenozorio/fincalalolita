@@ -130,7 +130,7 @@
     var loc = el("select", { required: true }, [el("option", { value: "", text: "Elige tu localidad" })].concat(S.locs.map(function (l) { return el("option", { value: String(l.id), text: l.nombre, selected: p.localidad_id === l.id }); })));
     var ind = el("input", { type: "text", maxlength: "300", value: p.indicaciones || "", placeholder: "Ej: portería, torre 2, timbre" });
     var ok = el("input", { type: "checkbox", id: "acctOk", checked: !!p.acepta_datos_at });
-    var consent = el("label", { class: "acct__check", for: "acctOk" }, [ok, el("span", { text: "Autorizo a Finca La Lolita a guardar estos datos solo para gestionar mis pedidos y entregas." })]);
+    var consent = el("label", { class: "acct__check", for: "acctOk" }, [ok, el("span", {}, ["Autorizo a Finca La Lolita a guardar estos datos solo para gestionar mis pedidos y entregas. ", el("a", { href: "privacidad/", target: "_blank", rel: "noopener", text: "Leer la política de privacidad" })])]);
     var btn = el("button", { class: "acct__primary", type: "submit", text: "Guardar mis datos" });
     var msgBox = el("div", { "aria-live": "polite" });
     var form = el("form", { class: "acct__form", onsubmit: function (e) {
