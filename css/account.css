@@ -78,13 +78,29 @@
 .acct__st.is-entregado { background: #dff3e6; color: #17603a; } .acct__st.is-cancelado { background: #fbe1da; color: #8f2a15; } .acct__st.is-confirmado { background: #fff4d6; color: #7a5200; }
 
 /* Invitación a registrarse */
-.rewards { display: flex; gap: 1rem; align-items: flex-start; max-width: 640px; margin: 1.4rem 0 .4rem; padding: 1.2rem; border-radius: 22px; background: #fff4d6; border: 2px solid var(--gold); }
+.rewards { display: flex; gap: 1.1rem; align-items: center; max-width: 640px; margin: 1.4rem 0 .4rem; padding: 1.3rem; border-radius: 24px; background: var(--ink); border: 3px solid var(--gold); box-shadow: 0 14px 40px rgba(43, 29, 20, .28); }
 .rewards[hidden] { display: none; }
-.rewards__badge { flex: none; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: var(--ink); font-size: 1.9rem; }
-.rewards h3 { font: 400 1.6rem/1.2 var(--serif); color: var(--ink); margin: 0 0 .4rem; }
-.rewards p { font: 400 1.15rem/1.5 var(--sans); color: rgba(43, 29, 20, .88); margin: 0 0 .9rem; }
-.rewards .btn { width: 100%; }
-@media (max-width: 420px) { .rewards { flex-direction: column; } }
+.rewards__badge { flex: none; width: 104px; height: 104px; border-radius: 50%; display: grid; place-content: center; text-align: center; background: var(--gold); color: var(--ink); line-height: 1; }
+.rewards__badge b { font: 700 3.4rem var(--serif); } .rewards__badge span { font: 800 .85rem var(--sans); letter-spacing: .12em; text-transform: uppercase; }
+.rewards__tag { font: 800 .85rem var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 0 0 .3rem; }
+.rewards h3 { font: 400 1.7rem/1.15 var(--serif); color: var(--cream); margin: 0 0 .5rem; }
+.rewards p { font: 400 1.15rem/1.5 var(--sans); color: rgba(247, 240, 226, .9); margin: 0 0 1rem; }
+.rewards p b { color: var(--gold); }
+.rewards .btn { width: 100%; animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(230, 185, 79, .55); } 50% { box-shadow: 0 0 0 12px rgba(230, 185, 79, 0); } }
+@media (prefers-reduced-motion: reduce) { .rewards .btn { animation: none; } }
+@media (max-width: 480px) { .rewards { flex-direction: column; text-align: center; } .rewards__badge { width: 96px; height: 96px; } }
+
+.hero__promo { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1rem; padding: .7rem 1.2rem; border-radius: 999px; border: 2px solid var(--gold); background: rgba(14, 8, 4, .55); color: var(--cream); font: 600 1rem/1.3 var(--sans); cursor: pointer; text-align: left; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.hero__star { color: var(--gold); font-size: 1.3rem; } .hero__promo b { color: var(--gold); }
+.hero__promo:hover { background: rgba(230, 185, 79, .2); }
+.hero__promo[hidden] { display: none; }
+
+.chip { position: fixed; left: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 40; display: flex; align-items: stretch; max-width: calc(100vw - 96px); border-radius: 18px; background: var(--gold); color: var(--ink); box-shadow: 0 10px 30px rgba(0, 0, 0, .4); overflow: hidden; }
+.chip[hidden] { display: none; }
+.chip__main { display: grid; gap: .1rem; padding: .7rem .9rem; border: 0; background: transparent; color: inherit; font: 600 1rem/1.25 var(--sans); text-align: left; cursor: pointer; }
+.chip__main span { margin-right: .3rem; } .chip__main small { font: 800 .8rem var(--sans); letter-spacing: .06em; text-transform: uppercase; opacity: .8; }
+.chip__x { width: 40px; border: 0; background: rgba(43, 29, 20, .12); color: var(--ink); font-size: 1.5rem; cursor: pointer; }
 
 .nav__avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; margin-right: .5rem; vertical-align: middle; }
 .nav__acct { display: inline-flex; align-items: center; }

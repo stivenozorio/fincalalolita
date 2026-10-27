@@ -63,20 +63,33 @@
   function refresh() { return loadUser().then(function () { paintNav(); paintRewards(); paintDelivery(); if (isOpen()) paintModal(); }); }
 
   /* ---------- Invitación a registrarse (sección Huevos) ---------- */
+  var chipClosed = false; try { chipClosed = sessionStorage.getItem("lolita_chip_x") === "1"; } catch (e) {}
+  var pastHero = false;                                   // el aviso flotante aparece al salir de la portada, para no tapar el inicio
+  function checkHero() { var h = $("huevos"); var now = !!h && h.getBoundingClientRect().top < window.innerHeight * 1.4; if (now !== pastHero) { pastHero = now; paintPromos(); } }
+  window.addEventListener("scroll", checkHero, { passive: true });
+  function paintPromos() {
+    var guest = !S.session, hp = $("heroPromo"), chip = $("promoChip");
+    if (hp) hp.hidden = !guest;
+    if (chip) chip.hidden = !(guest && !chipClosed && S.lines.length === 0 && pastHero);
+  }
   function paintRewards() {
+    paintPromos();
     var box = $("rewards"); if (!box) return;
     box.hidden = false;
     var t = $("rewardsTitle"), x = $("rewardsText"), b = $("rewardsBtn");
     if (!S.session) {
+      $("rewardsNum").textContent = String(Number(S.ajustes.puntos_por_cubeta || 5)); $("rewardsTag").textContent = "Por cada cubeta";
       t.textContent = "Regístrate gratis y gana puntos";
       x.textContent = ""; x.appendChild(document.createTextNode("Con tu cuenta guardamos tus datos para pedir más rápido, y "));
       x.appendChild(el("b", { text: "cada cubeta que pidas te suma 5 puntos" })); x.appendChild(document.createTextNode(". Con tus puntos podrás ganar premios de la finca."));
       b.hidden = false; b.textContent = "Crear mi cuenta gratis";
     } else if (!complete()) {
+      $("rewardsNum").textContent = String(Number(S.ajustes.puntos_por_cubeta || 5)); $("rewardsTag").textContent = "Por cada cubeta";
       t.textContent = "Ya casi: completa tus datos";
       x.textContent = "Llénalos una sola vez y tus próximos pedidos serán muy rápidos. Cada cubeta te suma 5 puntos para ganar premios.";
       b.hidden = false; b.textContent = "Completar mis datos";
     } else {
+      $("rewardsNum").textContent = String(S.puntos); $("rewardsTag").textContent = "Tus puntos";
       t.textContent = "Tienes " + S.puntos + (S.puntos === 1 ? " punto" : " puntos");
       x.textContent = "Cada cubeta que te entregamos suma 5 puntos. Sigue pidiendo para ganar premios de la finca.";
       b.hidden = true;
@@ -232,7 +245,8 @@
     }
     if (!useProfileFlow()) {
       box.hidden = true; guestHint.hidden = false; guestHint.textContent = "";
-      guestHint.appendChild(el("span", { text: S.session ? "Completa tus datos para pedir más rápido y con domicilio automático." : "¿Pides seguido? Crea tu cuenta y la próxima vez solo eliges cuántas cubetas." }));
+      var gp = eggLine().qty * Number(S.ajustes.puntos_por_cubeta || 5);
+      guestHint.appendChild(el("span", {}, [S.session ? "Completa tus datos para pedir más rápido y con domicilio automático. " : "Con tu cuenta, este pedido te daría ", S.session ? null : el("b", { text: gp + " puntos" }), S.session ? null : " para ganar premios, y la próxima vez solo eliges cuántas cubetas."]));
       guestHint.appendChild(el("button", { class: "btn btn--dark btn--xl", type: "button", text: S.session ? "Completar mis datos" : "Crear mi cuenta / Entrar", onclick: openModal }));
       wa.textContent = "Enviar mi pedido por WhatsApp (sin cuenta)";
       return;
@@ -316,8 +330,11 @@
   }
 
   /* ---------- Arranque ---------- */
-  APP.onChange = function (lines) { S.lines = lines; var d = $("quickDone"); if (d && lines.length) d.remove(); paintDelivery(); };
+  APP.onChange = function (lines) { S.lines = lines; paintPromos(); var d = $("quickDone"); if (d && lines.length) d.remove(); paintDelivery(); };
   var rb = $("rewardsBtn"); if (rb) rb.addEventListener("click", openModal);
+  var hp = $("heroPromo"); if (hp) hp.addEventListener("click", openModal);
+  var cb = $("promoChipBtn"); if (cb) cb.addEventListener("click", openModal);
+  var cx = $("promoChipX"); if (cx) cx.addEventListener("click", function () { chipClosed = true; try { sessionStorage.setItem("lolita_chip_x", "1"); } catch (e) {} paintPromos(); });
   var acct = $("acctBtn"); if (acct) { acct.hidden = false; acct.addEventListener("click", openModal); }
   var wa = $("quickWa"); if (wa) wa.addEventListener("click", submit);
   sb.auth.onAuthStateChange(function (ev) { if (ev === "SIGNED_IN" || ev === "SIGNED_OUT" || ev === "TOKEN_REFRESHED") setTimeout(refresh, 0); });

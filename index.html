@@ -19,9 +19,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20261027m">
-<link rel="stylesheet" href="css/price.css?v=20261027m">
-<link rel="stylesheet" href="css/account.css?v=20261027m">
+  <link rel="stylesheet" href="css/styles.css?v=20261027p">
+<link rel="stylesheet" href="css/price.css?v=20261027p">
+<link rel="stylesheet" href="css/account.css?v=20261027p">
   <link rel="preload" as="image" href="assets/img/poster-b.jpg">
   <link rel="preload" as="image" href="assets/logo/wordmark-crema.webp">
 </head>
@@ -65,6 +65,7 @@
         <h1 class="display">Cada huevo tiene una historia.</h1>
         <p class="lead">Un sueño familiar que crece un día a la vez.</p>
         <a class="btn btn--gold" href="#huevos">Descubre nuestros productos</a>
+        <button class="hero__promo" id="heroPromo" type="button" hidden><span class="hero__star" aria-hidden="true">★</span><span>Regístrate gratis y gana <b>5 puntos</b> por cada cubeta</span></button>
       </div>
 
       <ol class="hero__chapters" id="heroChapters" aria-hidden="true">
@@ -89,11 +90,12 @@
       <h2 class="h2 h2--dark reveal" id="huevosTitle">Pide tus huevos aquí.</h2>
       <p class="body body--dark reveal">Es muy fácil, en tres pasos:</p>
       <div class="rewards reveal" id="rewards" hidden>
-        <div class="rewards__badge" aria-hidden="true">★</div>
+        <div class="rewards__badge" aria-hidden="true"><b id="rewardsNum">5</b><span>puntos</span></div>
         <div class="rewards__text">
+          <p class="rewards__tag" id="rewardsTag">Por cada cubeta</p>
           <h3 id="rewardsTitle">Regístrate gratis y gana puntos</h3>
           <p id="rewardsText">Con tu cuenta guardamos tus datos para pedir más rápido, y <b>cada cubeta que pidas te suma 5 puntos</b>. Con tus puntos podrás ganar premios de la finca.</p>
-          <button class="btn btn--gold btn--xl" id="rewardsBtn" type="button">Crear mi cuenta gratis</button>
+          <button class="btn btn--gold btn--xl rewards__btn" id="rewardsBtn" type="button">Crear mi cuenta gratis</button>
         </div>
       </div>
       <ol class="easy reveal">
@@ -326,6 +328,12 @@
   <p id="lightboxCap"></p>
 </div>
 
+<!-- Invitación flotante a registrarse (solo sin sesión) -->
+<div class="chip" id="promoChip" hidden>
+  <button class="chip__main" id="promoChipBtn" type="button"><span aria-hidden="true">★</span> Gana <b>5 puntos</b> por cada cubeta<small>Regístrate gratis</small></button>
+  <button class="chip__x" id="promoChipX" type="button" aria-label="Cerrar este aviso">×</button>
+</div>
+
 <!-- Asistente flotante (gallina): respuestas guiadas, sin IA ni recolección de datos -->
 <div class="chat" id="chat">
   <p class="chat__tease" id="chatTease" hidden>¿Te ayudo con tu pedido?</p>
@@ -343,19 +351,19 @@
   </button>
 </div>
 
-<script src="js/config.js?v=20261027m"></script>
-<script src="js/catalog.js?v=20261027m"></script>
-<script src="js/order-core.js?v=20261027m"></script>
-<script src="js/i18n.js?v=20261027m"></script>
-<script src="js/farm.js?v=20261027m"></script>
-<script src="js/scroll-frames.js?v=20261027m"></script>
-<script src="js/main.js?v=20261027m"></script>
-<script src="js/price.js?v=20261027m"></script>
+<script src="js/config.js?v=20261027p"></script>
+<script src="js/catalog.js?v=20261027p"></script>
+<script src="js/order-core.js?v=20261027p"></script>
+<script src="js/i18n.js?v=20261027p"></script>
+<script src="js/farm.js?v=20261027p"></script>
+<script src="js/scroll-frames.js?v=20261027p"></script>
+<script src="js/main.js?v=20261027p"></script>
+<script src="js/price.js?v=20261027p"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="js/sb.js?v=20261027m"></script>
-<script src="js/account.js?v=20261027m"></script>
-<script src="js/chat.js?v=20261027m"></script>
-<script src="js/scrollfx.js?v=20261027m"></script>
-<script src="js/storyegg.js?v=20261027m"></script>
+<script src="js/sb.js?v=20261027p"></script>
+<script src="js/account.js?v=20261027p"></script>
+<script src="js/chat.js?v=20261027p"></script>
+<script src="js/scrollfx.js?v=20261027p"></script>
+<script src="js/storyegg.js?v=20261027p"></script>
 </body>
 </html>
