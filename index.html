@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20261026a">
-<link rel="stylesheet" href="css/price.css?v=20261026a">
+  <link rel="stylesheet" href="css/styles.css?v=20261027a">
+<link rel="stylesheet" href="css/price.css?v=20261027a">
   <link rel="preload" as="image" href="assets/img/poster-b.jpg">
   <link rel="preload" as="image" href="assets/logo/wordmark-crema.webp">
 </head>
@@ -30,6 +30,7 @@
 <header class="nav" id="nav">
   <a class="nav__brand" href="#top" aria-label="Finca La Lolita, ir al inicio"><img class="nav__logo" src="assets/logo/wordmark-crema.webp" alt="Finca La Lolita, de Efraín y Lucila" width="1000" height="809" decoding="async"></a>
   <nav class="nav__links" id="navLinks" aria-label="Principal">
+    <a href="#precio">Precio</a>
     <a href="#story">Historia</a>
     <a href="#huevos">Huevos</a>
     <a href="#artesanias">Artesanías</a>
@@ -76,6 +77,19 @@
       <div class="hero__hint" id="heroHint"><span>Desliza</span><i></i></div>
       <div class="hero__progress" aria-hidden="true"><i id="heroBar"></i></div>
       <div class="hero__loading" id="heroLoading" role="status" aria-live="polite"><i></i><span>Cargando la historia…</span></div>
+    </div>
+  </section>
+
+  <!-- 1b · PRECIO DE LA CUBETA (justo después del hero) -->
+  <section class="sec sec--cream price" id="precio" aria-labelledby="precioTitle">
+    <div class="wrap">
+      <p class="eyebrow eyebrow--dark reveal">Precio de hoy</p>
+      <h2 class="h2 h2--dark reveal" id="precioTitle">¿A cómo está la cubeta de huevos?</h2>
+      <p class="body body--dark reveal">El precio cambia con el mercado. Aquí ves el valor actual, si subió o bajó y cuánto, y cómo ha ido cambiando.</p>
+      <div class="pcard reveal" id="priceCard" aria-busy="true" aria-live="polite" data-src="api/price.php">
+        <p class="pcard__note">Cargando el precio de la cubeta…</p>
+      </div>
+      <a class="btn btn--dark reveal" href="#huevos">Pedir huevos por WhatsApp</a>
     </div>
   </section>
 
@@ -163,11 +177,8 @@
       <p class="eyebrow eyebrow--dark reveal">Huevos</p>
       <h2 class="h2 h2--dark reveal">Opciones frescas, hechas simples.</h2>
       <ul class="perks reveal">
-        <li>Pedido directo por WhatsApp</li><li>Precios en pesos colombianos</li><li>Confirmas con Dagoberto</li>
+        <li>Se venden por cubeta</li><li>Pedido directo por WhatsApp</li><li>Dagoberto confirma el valor final</li>
       </ul>
-      <div class="pcard reveal" id="priceCard" aria-busy="true" aria-live="polite" data-src="api/price.php">
-        <p class="pcard__note">Cargando el precio de la cubeta…</p>
-      </div>
       <div class="notice" id="previewBanner" hidden></div>
       <div class="catalog catalog--feature" id="catalog-huevos" aria-live="polite"></div>
       <div class="catalog-empty" id="empty-huevos" hidden>
@@ -260,7 +271,7 @@
   <div class="wrap footer__in">
     <div class="footer__brand"><b>Finca La Lolita</b><p>Un sueño familiar que crece un día a la vez.</p></div>
     <nav class="footer__nav" aria-label="Pie de página">
-      <a href="#story">Historia</a><a href="#huevos">Huevos</a><a href="#artesanias">Artesanías</a><a href="#how">Cómo pedir</a><a href="#care">Cuidado</a><a href="#community">Comunidad</a>
+      <a href="#precio">Precio</a><a href="#story">Historia</a><a href="#huevos">Huevos</a><a href="#artesanias">Artesanías</a><a href="#how">Cómo pedir</a><a href="#care">Cuidado</a><a href="#community">Comunidad</a>
     </nav>
     <div class="footer__contact">
       <a class="btn btn--gold js-wa" href="#" target="_blank" rel="noopener noreferrer" hidden>Escríbenos por WhatsApp</a>
@@ -315,16 +326,16 @@
   </button>
 </div>
 
-<script src="js/config.js?v=20261026a"></script>
-<script src="js/catalog.js?v=20261026a"></script>
-<script src="js/order-core.js?v=20261026a"></script>
-<script src="js/i18n.js?v=20261026a"></script>
-<script src="js/farm.js?v=20261026a"></script>
-<script src="js/scroll-frames.js?v=20261026a"></script>
-<script src="js/main.js?v=20261026a"></script>
-<script src="js/price.js?v=20261026a"></script>
-<script src="js/chat.js?v=20261026a"></script>
-<script src="js/scrollfx.js?v=20261026a"></script>
-<script src="js/storyegg.js?v=20261026a"></script>
+<script src="js/config.js?v=20261027a"></script>
+<script src="js/catalog.js?v=20261027a"></script>
+<script src="js/order-core.js?v=20261027a"></script>
+<script src="js/i18n.js?v=20261027a"></script>
+<script src="js/farm.js?v=20261027a"></script>
+<script src="js/scroll-frames.js?v=20261027a"></script>
+<script src="js/main.js?v=20261027a"></script>
+<script src="js/price.js?v=20261027a"></script>
+<script src="js/chat.js?v=20261027a"></script>
+<script src="js/scrollfx.js?v=20261027a"></script>
+<script src="js/storyegg.js?v=20261027a"></script>
 </body>
 </html>

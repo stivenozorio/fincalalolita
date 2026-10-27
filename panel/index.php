@@ -75,8 +75,8 @@ $csrf = h($_SESSION['csrf']);
 <meta name="robots" content="noindex, nofollow">
 <title>Panel · Finca La Lolita</title>
 <link rel="icon" href="../assets/logo/favicon-64.png">
-<link rel="stylesheet" href="panel.css?v=20261026a">
-<link rel="stylesheet" href="../css/price.css?v=20261026a">
+<link rel="stylesheet" href="panel.css?v=20261027a">
+<link rel="stylesheet" href="../css/price.css?v=20261027a">
 </head>
 <body>
 <main class="pn">
@@ -120,8 +120,8 @@ $csrf = h($_SESSION['csrf']);
   </form>
   <section class="pn__card pcard" id="priceCard" data-src="../api/price.php" aria-busy="true"><p class="pcard__note">Cargando…</p></section>
   <form method="post" class="pn__out"><input type="hidden" name="csrf" value="<?= $csrf ?>"><input type="hidden" name="action" value="logout"><button class="pn__link" type="submit">Cerrar sesión</button></form>
-  <script src="../js/price.js?v=20261026a"></script>
-  <script src="panel.js?v=20261026a"></script>
+  <script src="../js/price.js?v=20261027a"></script>
+  <script src="panel.js?v=20261027a"></script>
 <?php endif; ?>
 </main>
 </body>

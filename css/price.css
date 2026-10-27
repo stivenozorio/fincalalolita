@@ -26,3 +26,8 @@
 .pcard__note { margin-top: 1rem; font: 400 .8rem var(--sans); color: rgba(43, 29, 20, .62); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
+
+.price .pcard { margin-bottom: 1.8rem; background: var(--paper); }
+.price .pcard__note:last-child { max-width: 52ch; }
+.btn--dark { background: var(--ink); color: var(--cream); }
+.btn--dark:hover { background: var(--earth); }

@@ -22,7 +22,7 @@
   };
 
   function variationText(c) {
-    if (c.direction === "first") return "Primer registro de precio.";
+    if (c.direction === "first") return "Aún no hay cambios registrados.";
     if (c.direction === "same") return "Igual que el precio anterior.";
     return signed(c.delta) + " (" + pct(c.pct) + ") frente al precio anterior";
   }
