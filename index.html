@@ -19,8 +19,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20261027c">
-<link rel="stylesheet" href="css/price.css?v=20261027c">
+  <link rel="stylesheet" href="css/styles.css?v=20261027d">
+<link rel="stylesheet" href="css/price.css?v=20261027d">
+<link rel="stylesheet" href="css/account.css?v=20261027d">
   <link rel="preload" as="image" href="assets/img/poster-b.jpg">
   <link rel="preload" as="image" href="assets/logo/wordmark-crema.webp">
 </head>
@@ -38,6 +39,7 @@
     <a href="#care">Cuidado</a>
     <a href="#community">Comunidad</a>
   </nav>
+  <button class="nav__acct" id="acctBtn" type="button" hidden>Entrar</button>
   <button class="nav__toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Menú"><span></span><span></span></button>
 </header>
 
@@ -112,7 +114,7 @@
       <p class="eyebrow eyebrow--dark reveal">Precio de la cubeta</p>
       <h2 class="h2 h2--dark reveal" id="precioTitle">¿A cómo está hoy la cubeta?</h2>
       <p class="body body--dark reveal">El precio cambia con el mercado. Aquí ves cuánto cuesta hoy, si subió o bajó, y cómo ha cambiado.</p>
-      <div class="pcard reveal" id="priceCard" aria-busy="true" aria-live="polite" data-src="api/price.php">
+      <div class="pcard reveal" id="priceCard" aria-busy="true" aria-live="polite">
         <p class="pcard__note">Cargando el precio de la cubeta…</p>
       </div>
       <a class="btn btn--dark btn--xl reveal" href="#huevos">Ir a pedir mis huevos</a>
@@ -333,16 +335,19 @@
   </button>
 </div>
 
-<script src="js/config.js?v=20261027c"></script>
-<script src="js/catalog.js?v=20261027c"></script>
-<script src="js/order-core.js?v=20261027c"></script>
-<script src="js/i18n.js?v=20261027c"></script>
-<script src="js/farm.js?v=20261027c"></script>
-<script src="js/scroll-frames.js?v=20261027c"></script>
-<script src="js/main.js?v=20261027c"></script>
-<script src="js/price.js?v=20261027c"></script>
-<script src="js/chat.js?v=20261027c"></script>
-<script src="js/scrollfx.js?v=20261027c"></script>
-<script src="js/storyegg.js?v=20261027c"></script>
+<script src="js/config.js?v=20261027d"></script>
+<script src="js/catalog.js?v=20261027d"></script>
+<script src="js/order-core.js?v=20261027d"></script>
+<script src="js/i18n.js?v=20261027d"></script>
+<script src="js/farm.js?v=20261027d"></script>
+<script src="js/scroll-frames.js?v=20261027d"></script>
+<script src="js/main.js?v=20261027d"></script>
+<script src="js/price.js?v=20261027d"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="js/sb.js?v=20261027d"></script>
+<script src="js/account.js?v=20261027d"></script>
+<script src="js/chat.js?v=20261027d"></script>
+<script src="js/scrollfx.js?v=20261027d"></script>
+<script src="js/storyegg.js?v=20261027d"></script>
 </body>
 </html>

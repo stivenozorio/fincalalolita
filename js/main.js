@@ -154,6 +154,7 @@
     if (lines.some(function (l) { return CAT.products.some(function (p) { return p.id === l.productId && p.provisional; }); })) url = null;
     var wa = $("waLink"), off = $("waDisabled");
     if (url) { wa.href = url; wa.hidden = false; off.hidden = true; } else { wa.removeAttribute("href"); wa.hidden = true; off.hidden = false; }
+    if (window.LolitaApp && window.LolitaApp.onChange) window.LolitaApp.onChange(lines, t, url);
     var quick = $("quick");
     if (quick) {
       quick.hidden = count === 0;
@@ -177,6 +178,13 @@
   });
   $("orderNotes").addEventListener("input", renderOrder);
   I.onChange(renderCatalog);
-  window.LolitaApp = { refresh: renderCatalog };
+  window.LolitaApp = {
+    refresh: renderCatalog,
+    getLines: function () { return O.buildLines(CAT, selection, I.lang, preview); },
+    notes: function () { return $("orderNotes").value; },
+    setQty: function (k, n) { selection[k] = O.clampQty(n); if (!selection[k]) delete selection[k]; renderCatalog(); },
+    clear: function () { Object.keys(selection).forEach(function (k) { delete selection[k]; }); $("orderNotes").value = ""; renderCatalog(); },
+    onChange: null
+  };
   I.apply();
 })();

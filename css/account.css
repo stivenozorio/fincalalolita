@@ -1,0 +1,55 @@
+/* Cuenta del cliente, pedido con entrega y botón del menú. Letra grande y botones amplios. */
+.nav__acct { position: relative; z-index: 2; min-height: 44px; padding: 0 1.1rem; border-radius: 999px; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); font: 700 .95rem var(--sans); cursor: pointer; white-space: nowrap; }
+.nav__acct:hover { background: var(--gold); color: var(--ink); }
+
+.acct { position: fixed; inset: 0; z-index: 120; display: flex; align-items: flex-end; justify-content: center; }
+.acct[hidden] { display: none; }
+.acct__bg { position: absolute; inset: 0; background: rgba(14, 8, 4, .7); }
+.acct__card { position: relative; width: 100%; max-width: 560px; max-height: 94vh; overflow-y: auto; background: var(--paper); color: var(--ink); border-radius: 24px 24px 0 0; padding: 1.6rem 1.3rem calc(1.6rem + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; }
+@media (min-width: 640px) { .acct { align-items: center; } .acct__card { border-radius: 24px; } }
+.acct__close { position: absolute; top: 10px; right: 12px; width: 48px; height: 48px; border-radius: 50%; border: 0; background: var(--cream); color: var(--ink); font-size: 1.9rem; line-height: 1; cursor: pointer; }
+.acct h2 { font: 400 2rem/1.15 var(--serif); margin: 0 3rem .6rem 0; }
+.acct h3 { font: 400 1.5rem var(--serif); margin: 1.6rem 0 .6rem; }
+.acct__lead { font: 400 1.15rem/1.5 var(--sans); color: rgba(43, 29, 20, .85); margin-bottom: 1rem; }
+.acct__email { font: 500 1rem var(--sans); color: rgba(43, 29, 20, .7); margin-bottom: .8rem; }
+.acct__form { display: grid; gap: 1rem; }
+.acct__field { display: grid; gap: .35rem; font: 700 1.05rem var(--sans); }
+.acct__field small { font: 400 .95rem/1.35 var(--sans); color: rgba(43, 29, 20, .7); }
+.acct input[type="text"], .acct input[type="email"], .acct input[type="tel"], .acct input[type="date"], .acct select,
+.deliv input[type="date"], .deliv select { width: 100%; min-height: 56px; padding: 0 14px; font: 500 1.15rem var(--sans); color: var(--ink); background: #fff; border: 2px solid rgba(43, 29, 20, .3); border-radius: 14px; }
+.acct input:focus, .acct select:focus, .deliv input:focus, .deliv select:focus { outline: 3px solid var(--gold); outline-offset: 1px; border-color: var(--earth); }
+.acct__check { display: flex; gap: .8rem; align-items: flex-start; font: 400 1.05rem/1.4 var(--sans); }
+.acct__check input { flex: none; width: 28px; height: 28px; margin-top: 2px; accent-color: var(--earth); }
+.acct__primary { min-height: 60px; border: 0; border-radius: 16px; background: var(--earth); color: #fff; font: 700 1.2rem var(--sans); cursor: pointer; }
+.acct__primary:disabled { opacity: .6; cursor: wait; }
+.acct__ghost { min-height: 48px; padding: 0 1.1rem; border-radius: 14px; border: 2px solid var(--earth); background: transparent; color: var(--earth); font: 700 1rem var(--sans); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+.acct__msg { padding: .8rem 1rem; border-radius: 12px; font: 600 1.05rem/1.4 var(--sans); background: #dff3e6; color: #17603a; }
+.acct__msg.is-err { background: #fbe1da; color: #8f2a15; }
+.acct__steps { display: grid; gap: .6rem; padding-left: 1.4rem; margin: 0 0 1.2rem; list-style: decimal; font: 500 1.15rem/1.4 var(--sans); }
+.acct__fine { margin-top: 1rem; font: 400 1rem/1.4 var(--sans); color: rgba(43, 29, 20, .7); }
+.acct__points { display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; padding: .9rem 1rem; margin-bottom: 1.2rem; border-radius: 16px; background: #fff4d6; border: 1px solid var(--gold); font: 500 1rem var(--sans); }
+.acct__points b { font: 700 2.2rem var(--serif); color: var(--earth); }
+.acct__orders { display: grid; gap: .7rem; }
+.acct__orders li { display: flex; justify-content: space-between; align-items: center; gap: .8rem; flex-wrap: wrap; padding: .8rem 1rem; border: 1px solid var(--line-light); border-radius: 14px; background: #fff; }
+.acct__orders div { display: grid; font: 500 1.05rem var(--sans); } .acct__orders small { font-size: .95rem; color: rgba(43, 29, 20, .7); }
+.acct__links { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.6rem; }
+
+/* Entrega dentro de Huevos */
+.quick { max-width: 640px; }
+.quick__guest { display: grid; gap: .8rem; margin-top: 1rem; font: 500 1.1rem/1.4 var(--sans); color: var(--ink); }
+.quick__done { margin-top: 1.2rem; max-width: 640px; display: grid; gap: 1rem; padding: 1.3rem; border-radius: 22px; background: #e9f6ee; border: 2px solid var(--wa); color: #17603a; font: 600 1.2rem/1.4 var(--sans); }
+.deliv { display: grid; gap: 1rem; margin-bottom: 1.1rem; padding-bottom: 1.1rem; border-bottom: 1px solid rgba(31, 143, 78, .35); }
+.deliv h3 { font: 400 1.5rem var(--serif); color: var(--ink); }
+.deliv__opts { display: grid; gap: .6rem; }
+.deliv__opt { display: flex; gap: .9rem; align-items: center; padding: .9rem 1rem; border: 2px solid rgba(43, 29, 20, .25); border-radius: 16px; background: #fff; cursor: pointer; }
+.deliv__opt:has(input:checked) { border-color: var(--wa); background: #f3fbf6; }
+.deliv__opt.is-off { opacity: .55; cursor: not-allowed; }
+.deliv__opt input { flex: none; width: 28px; height: 28px; accent-color: var(--wa); }
+.deliv__opt span { display: grid; } .deliv__opt b { font: 700 1.2rem var(--sans); } .deliv__opt small { font: 400 1rem var(--sans); color: rgba(43, 29, 20, .75); }
+.deliv__when { display: grid; gap: .8rem; } .deliv__when .acct__field { font-size: 1.05rem; }
+.deliv__where { display: grid; gap: .4rem; font: 400 1.05rem/1.4 var(--sans); } .deliv__where b { font-weight: 700; font-size: 1.1rem; } .deliv__where .acct__ghost { justify-self: start; }
+.deliv__sum { display: grid; gap: .4rem; margin: 0; font: 500 1.15rem var(--sans); }
+.deliv__sum div { display: flex; justify-content: space-between; gap: 1rem; } .deliv__sum dd { margin: 0; font-weight: 700; }
+.deliv__total { padding-top: .5rem; border-top: 2px solid rgba(31, 143, 78, .4); font-size: 1.4rem !important; } .deliv__total dd { color: #17603a; }
+.deliv__pts { font: 600 1.05rem var(--sans); color: var(--earth); }
+@media (min-width: 560px) { .deliv__when { grid-template-columns: 1fr 1fr; } }

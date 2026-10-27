@@ -22,7 +22,6 @@ jobs:
           mkdir out
           cp -r index.html css js assets admin api panel out/
           for f in $(find api panel tests -name '*.php'); do php -l "$f" >/dev/null || { echo "::error::error de sintaxis en $f"; exit 1; }; done
-          php tests/price.test.php
           test ! -e out/data || { echo "::error::data/ nunca debe viajar en el paquete"; exit 1; }
           test -f out/index.html || { echo "::error::falta out/index.html"; exit 1; }
           test "$(ls out/assets/frames | wc -l)" -eq 300 || { echo "::error::faltan fotogramas (video a)"; exit 1; }
@@ -70,20 +69,23 @@ jobs:
           done
           echo "::warning::No se pudo conectar al sitio desde el runner; la subida terminó bien pero queda sin comprobar."
 
-      - name: Verificar precio y protección de datos
+      - name: Verificar Supabase y archivos antiguos
+        env:
+          SB_URL: https://fubrfxmgtugrtuckcucf.supabase.co
         run: |
           set -uo pipefail
           B=https://fincalalolita.digicyus.com
           fail=0
           code() { curl -s -o /dev/null -w '%{http_code}' --connect-timeout 20 --max-time 40 "$1"; }
+          KEY=$(grep -o 'sb_publishable_[A-Za-z0-9_-]*' js/config.js | head -1)
           for attempt in 1 2 3; do
-            curl -sS --connect-timeout 20 --max-time 40 "$B/api/price.php" -o price.json && grep -q '"ok":true' price.json && break
+            curl -sS --connect-timeout 20 --max-time 40 -H "apikey: $KEY" "$SB_URL/rest/v1/precios_historial?select=precio&limit=1" -o price.json && grep -q '"precio"' price.json && break
             sleep 10
           done
-          grep -q '"ok":true' price.json && echo "API de precio: OK -> $(head -c 160 price.json)" || { echo "::error::api/price.php no responde con datos"; fail=1; }
-          for u in data/prices.json data/auth.php data/attempts.php api/lib.php; do
+          grep -q '"precio"' price.json && echo "Supabase precio: OK -> $(head -c 120 price.json)" || { echo "::error::Supabase no devuelve el precio (¿se corrió supabase/schema.sql?): $(head -c 300 price.json)"; fail=1; }
+          for u in data/prices.json data/auth.php api/lib.php; do
             c=$(code "$B/$u"); echo "$u -> $c"
             case "$c" in 403|404) ;; *) echo "::error::$u no debería ser accesible ($c)"; fail=1;; esac
           done
-          c=$(code "$B/panel/"); echo "panel/ -> $c"; [ "$c" = "200" ] || { echo "::error::el panel no abre ($c)"; fail=1; }
+          c=$(code "$B/admin/"); echo "admin/ -> $c"; [ "$c" = "200" ] || { echo "::error::el panel /admin/ no abre ($c)"; fail=1; }
           exit $fail

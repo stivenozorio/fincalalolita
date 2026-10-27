@@ -100,9 +100,23 @@
     root.appendChild(el("p", "pcard__note", "El precio puede cambiar. Dagoberto siempre te confirma el valor final por WhatsApp."));
   }
 
-  function load(url) {
-    return fetch(url, { cache: "no-store", credentials: "same-origin" }).then(function (r) { if (!r.ok) throw new Error("http " + r.status); return r.json(); })
-      .then(function (d) { if (!d || !d.ok || !d.current) throw new Error("datos"); return d; });
+  /** Fecha de Supabase (UTC) -> hora de Bogotá en formato "AAAA-MM-DDTHH:mm" que entienden las funciones de arriba. */
+  function bogota(iso) {
+    var f = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bogota", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date(iso)), o = {};
+    f.forEach(function (p) { o[p.type] = p.value; });
+    return o.year + "-" + o.month + "-" + o.day + "T" + (o.hour === "24" ? "00" : o.hour) + ":" + o.minute;
+  }
+  /** Lee el historial desde Supabase (lectura pública). */
+  function load() {
+    var cfg = window.LOLITA_CONFIG || {};
+    if (!cfg.supabaseUrl || !cfg.supabaseKey) return Promise.reject(new Error("sin configuración"));
+    return fetch(cfg.supabaseUrl + "/rest/v1/precios_historial?select=*&order=creado_en.asc,id.asc", { cache: "no-store", headers: { apikey: cfg.supabaseKey, Authorization: "Bearer " + cfg.supabaseKey } })
+      .then(function (r) { if (!r.ok) throw new Error("http " + r.status); return r.json(); })
+      .then(function (rows) {
+        if (!rows || !rows.length) throw new Error("sin datos");
+        var hist = rows.map(function (r) { return { id: r.id, price: r.precio, at: bogota(r.creado_en), note: r.nota || "", delta: r.variacion, pct: r.variacion_pct === null ? null : Number(r.variacion_pct), direction: r.direccion }; });
+        return { ok: true, count: hist.length, current: hist[hist.length - 1], history: hist };
+      });
   }
 
   /* Conecta el precio vivo con el producto "Huevos de gallina" del catálogo (el pedido por WhatsApp usa este valor). */
@@ -121,7 +135,7 @@
 
   var root = document.getElementById("priceCard");
   if (root) {
-    load(root.getAttribute("data-src") || "api/price.php").then(function (d) { render(root, d); root.removeAttribute("aria-busy"); applyToCatalog(d); })
+    load().then(function (d) { render(root, d); root.removeAttribute("aria-busy"); applyToCatalog(d); })
       .catch(function () { root.removeAttribute("aria-busy"); root.textContent = ""; root.appendChild(el("p", "pcard__note", "El precio de la cubeta no está disponible por ahora. Escríbenos por WhatsApp y Dagoberto te lo confirma.")); });
   }
 })();
