@@ -30,6 +30,16 @@
     if (/Failed to fetch|NetworkError|network/i.test(m)) return "No hay conexión. Revisa tu internet e intenta de nuevo.";
     return m || "No se pudo completar. Intenta de nuevo.";
   }
-  api.cop = cop; api.el = el; api.msg = msg;
+  /** Botón "Continuar con Google" (letra "G" a color, sin imágenes externas). */
+  function googleButton(onError) {
+    var b = el("button", { class: "gbtn", type: "button", onclick: function () {
+      b.disabled = true;
+      api.client.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } }).then(function (r) {
+        if (r.error) { b.disabled = false; onError(msg(r.error)); }
+      }).catch(function (e) { b.disabled = false; onError(msg(e)); });
+    } }, [el("span", { class: "gbtn__g", "aria-hidden": "true", text: "G" }), el("span", { text: "Continuar con Google" })]);
+    return b;
+  }
+  api.cop = cop; api.el = el; api.msg = msg; api.googleButton = googleButton;
   window.LolitaSB = api;
 })();

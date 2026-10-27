@@ -94,8 +94,12 @@
       body.appendChild(el("button", { class: "acct__ghost", type: "button", text: "Usar otro correo", onclick: function () { paintLogin(); } }));
       return;
     }
-    body.appendChild(el("p", { class: "acct__lead", text: "Con tu cuenta guardamos tu nombre y dirección, ves tus pedidos anteriores y juntas puntos. No necesitas contraseña: te enviamos un enlace a tu correo." }));
+    body.appendChild(el("p", { class: "acct__lead", text: "Con tu cuenta guardamos tu nombre y dirección, ves tus pedidos anteriores y juntas puntos. Entra con tu cuenta de Google o, si prefieres, con un enlace a tu correo (sin contraseña)." }));
     if (error) body.appendChild(note(error, "is-err"));
+    var gerr = el("div", { "aria-live": "polite" });
+    body.appendChild(SB.googleButton(function (m) { gerr.textContent = ""; gerr.appendChild(note(m, "is-err")); }));
+    body.appendChild(gerr);
+    body.appendChild(el("p", { class: "acct__or", text: "o con tu correo" }));
     var email = el("input", { type: "email", required: true, autocomplete: "email", inputmode: "email", placeholder: "tucorreo@ejemplo.com", autocapitalize: "none", spellcheck: "false" });
     var btn = el("button", { class: "acct__primary", type: "submit", text: "Enviarme el enlace al correo" });
     var f = el("form", { class: "acct__form", onsubmit: function (e) {

@@ -53,3 +53,8 @@
 .deliv__total { padding-top: .5rem; border-top: 2px solid rgba(31, 143, 78, .4); font-size: 1.4rem !important; } .deliv__total dd { color: #17603a; }
 .deliv__pts { font: 600 1.05rem var(--sans); color: var(--earth); }
 @media (min-width: 560px) { .deliv__when { grid-template-columns: 1fr 1fr; } }
+
+.gbtn { display: flex; align-items: center; justify-content: center; gap: .8rem; width: 100%; min-height: 60px; border-radius: 16px; border: 2px solid rgba(43, 29, 20, .35); background: #fff; color: var(--ink); font: 700 1.15rem var(--sans); cursor: pointer; }
+.gbtn:hover { border-color: var(--earth); } .gbtn:disabled { opacity: .6; cursor: wait; }
+.gbtn__g { font: 700 1.5rem Arial, sans-serif; background: conic-gradient(from -45deg, #ea4335 0 25%, #fbbc05 0 50%, #34a853 0 75%, #4285f4 0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.acct__or { text-align: center; margin: 1rem 0; font: 600 1rem var(--sans); color: rgba(43, 29, 20, .65); }

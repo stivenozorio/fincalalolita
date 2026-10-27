@@ -18,7 +18,8 @@
     if (sent) return show([el("h1", { text: "Revisa tu correo" }), el("p", { class: "ad__lead", text: "Te enviamos un enlace a " + sent + ". Ábrelo y toca el botón del mensaje (mira también en Spam)." })]);
     var email = el("input", { type: "email", required: true, autocomplete: "email", inputmode: "email", autocapitalize: "none", placeholder: "tucorreo@ejemplo.com" });
     var btn = el("button", { class: "btn", type: "submit", text: "Enviarme el enlace para entrar" });
-    show([el("h1", { text: "Panel de administración" }), el("p", { class: "ad__lead", text: "Escribe tu correo. Te enviamos un enlace para entrar, sin contraseña." }), err ? note(err, true) : null,
+    show([el("h1", { text: "Panel de administración" }), el("p", { class: "ad__lead", text: "Entra con Google o con un enlace a tu correo, sin contraseña." }), err ? note(err, true) : null,
+      el("div", { class: "ad__card" }, [SB.googleButton(function (m) { login(null, m); }), el("p", { class: "ad__or", text: "o con tu correo" })]),
       el("form", { class: "ad__card", onsubmit: function (e) {
         e.preventDefault(); btn.disabled = true; btn.textContent = "Enviando…"; var to = email.value.trim();
         sb.auth.signInWithOtp({ email: to, options: { emailRedirectTo: location.origin + location.pathname } }).then(function (r) { r.error ? login(null, SB.msg(r.error)) : login(to); }).catch(function (x) { login(null, SB.msg(x)); });
@@ -155,6 +156,6 @@
     return card;
   }
 
-  sb.auth.onAuthStateChange(function (ev) { if (ev === "SIGNED_IN" && /access_token|type=/.test(location.hash)) { history.replaceState(null, "", location.pathname); start(); } });
+  sb.auth.onAuthStateChange(function (ev) { if (ev === "SIGNED_IN" && /access_token|type=|code=/.test(location.hash + location.search)) { history.replaceState(null, "", location.pathname); start(); } });
   start();
 })();

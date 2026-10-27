@@ -31,3 +31,6 @@ input[type="checkbox"] { display: inline-block; width: 28px; min-height: 28px; h
 .ord small { color: rgba(43, 29, 20, .75); font-size: .95rem; } .ord select { margin: 4px 0 0; min-height: 50px; }
 .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; } .tabs button { flex: 1; min-width: 120px; }
 .tabs button[aria-pressed="true"] { background: var(--earth); color: #fff; }
+.gbtn { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 60px; border-radius: 14px; border: 2px solid rgba(43, 29, 20, .35); background: #fff; color: var(--ink); font: 700 1.15rem system-ui, sans-serif; cursor: pointer; }
+.gbtn__g { font: 700 1.5rem Arial, sans-serif; background: conic-gradient(from -45deg, #ea4335 0 25%, #fbbc05 0 50%, #34a853 0 75%, #4285f4 0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.ad__or { text-align: center; margin: 12px 0 0; font-weight: 600; color: rgba(43, 29, 20, .65); }
