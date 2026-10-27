@@ -235,3 +235,21 @@ revoke execute on function public.saldo_puntos() from public, anon;
 grant  execute on function public.saldo_puntos() to authenticated;
 revoke execute on function public.es_admin() from public, anon;
 grant  execute on function public.es_admin() to authenticated;
+
+-- ============ Lista de clientes (solo administradores) ============
+create or replace function public.admin_clientes()
+returns table (id uuid, email text, nombre text, telefono text, direccion text, localidad text, rol text, creado_en timestamptz, pedidos bigint, puntos bigint)
+language plpgsql stable security definer set search_path = public as $$
+begin
+  if not public.es_admin() then raise exception 'Sin permiso.'; end if;
+  return query
+  select p.id, u.email::text, p.nombre, p.telefono, p.direccion, l.nombre, p.rol, p.creado_en,
+         (select count(*) from public.pedidos o where o.usuario_id = p.id),
+         (select coalesce(sum(x.puntos), 0) from public.puntos x where x.usuario_id = p.id)::bigint
+  from public.perfiles p
+  join auth.users u on u.id = p.id
+  left join public.localidades l on l.id = p.localidad_id
+  order by p.creado_en desc;
+end $$;
+revoke execute on function public.admin_clientes() from public, anon;
+grant  execute on function public.admin_clientes() to authenticated;

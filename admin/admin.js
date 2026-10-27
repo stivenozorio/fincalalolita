@@ -48,9 +48,10 @@
       sb.from("localidades").select("*").order("nombre"),
       sb.from("franjas").select("*").order("id"),
       sb.from("ajustes").select("*"),
-      sb.from("pedidos").select("*").order("creado_en", { ascending: false }).limit(30)
+      sb.from("pedidos").select("*").order("creado_en", { ascending: false }).limit(30),
+      sb.rpc("admin_clientes")
     ]).then(function (r) {
-      var D = { precios: r[0].data || [], zonas: r[1].data || [], locs: r[2].data || [], franjas: r[3].data || [], ajustes: {}, pedidos: r[5].data || [] };
+      var D = { precios: r[0].data || [], zonas: r[1].data || [], locs: r[2].data || [], franjas: r[3].data || [], ajustes: {}, pedidos: r[5].data || [], clientes: r[6].data || [], clientesError: r[6].error ? SB.msg(r[6].error) : null };
       (r[4].data || []).forEach(function (a) { D.ajustes[a.clave] = a.valor; });
       draw(D);
     }).catch(function () { show([note("No se pudieron cargar los datos. Recarga la página.", true)]); });
@@ -59,10 +60,10 @@
 
   function draw(D) {
     var tabs = el("div", { class: "tabs", role: "group", "aria-label": "Secciones" });
-    [["precio", "Precio"], ["envio", "Domicilios"], ["horarios", "Horarios"], ["pedidos", "Pedidos"]].forEach(function (t) {
+    [["precio", "Precio"], ["pedidos", "Pedidos"], ["clientes", "Clientes"], ["envio", "Domicilios"], ["horarios", "Horarios"]].forEach(function (t) {
       tabs.appendChild(el("button", { class: "btn btn--ghost", type: "button", "aria-pressed": String(tab === t[0]), text: t[1], onclick: function () { tab = t[0]; flash = null; draw(D); } }));
     });
-    var view = tab === "precio" ? vPrecio(D) : tab === "envio" ? vEnvio(D) : tab === "horarios" ? vHorarios(D) : vPedidos(D);
+    var view = tab === "precio" ? vPrecio(D) : tab === "envio" ? vEnvio(D) : tab === "horarios" ? vHorarios(D) : tab === "clientes" ? vClientes(D) : vPedidos(D);
     show([el("div", { class: "ad__top" }, [el("h1", { text: "Hola, Dagoberto" }), el("button", { class: "btn btn--ghost", type: "button", text: "Salir", onclick: out })]), flash ? note(flash) : null, tabs, view]);
   }
 
@@ -135,6 +136,36 @@
     } });
     fr.appendChild(el("div", { class: "zone" }, [field("Horario nuevo", nn), add]));
     nodes.push(fr); return el("div", {}, nodes);
+  }
+
+  /* ---------- Clientes ---------- */
+  function csvCell(v) { v = v === null || v === undefined ? "" : String(v); return /[",\n;]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+  function vClientes(D) {
+    var card = el("div", { class: "ad__card" }, [el("h2", { text: "Clientes registrados (" + D.clientes.length + ")" })]);
+    if (D.clientesError) { card.appendChild(note("No se pudo cargar la lista. Falta correr el SQL actualizado en Supabase. (" + D.clientesError + ")", true)); return card; }
+    var q = el("input", { type: "search", placeholder: "Buscar por nombre, correo o celular", "aria-label": "Buscar cliente", autocomplete: "off" });
+    var dl = el("button", { class: "btn btn--ghost", type: "button", text: "Descargar lista (Excel)", onclick: function () {
+      var head = ["Nombre", "Correo", "Celular", "Dirección", "Localidad", "Pedidos", "Puntos", "Registro"];
+      var rows = D.clientes.map(function (c) { return [c.nombre, c.email, c.telefono, c.direccion, c.localidad, c.pedidos, c.puntos, c.creado_en ? c.creado_en.slice(0, 10) : ""]; });
+      var csv = "\ufeff" + [head].concat(rows).map(function (r) { return r.map(csvCell).join(";"); }).join("\r\n");
+      var a = el("a", { href: URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" })), download: "clientes-finca-la-lolita.csv" }); document.body.appendChild(a); a.click(); a.remove();
+    } });
+    var list = el("div", {});
+    function paint() {
+      var t = q.value.trim().toLowerCase(); list.textContent = "";
+      var rows = D.clientes.filter(function (c) { return !t || [c.nombre, c.email, c.telefono].join(" ").toLowerCase().indexOf(t) !== -1; });
+      if (!rows.length) list.appendChild(el("p", { text: D.clientes.length ? "No hay clientes con esa búsqueda." : "Todavía no hay clientes registrados." }));
+      rows.forEach(function (c) {
+        list.appendChild(el("div", { class: "ord" }, [
+          el("b", { text: (c.nombre || "Sin nombre todavía") + (c.rol === "admin" ? " · administrador" : "") }),
+          el("small", { text: c.email }), el("small", { text: c.telefono ? "Celular: " + c.telefono : "Sin celular todavía" }),
+          el("small", { text: c.direccion ? c.direccion + (c.localidad ? ", " + c.localidad : "") : "Sin dirección todavía" }),
+          el("small", { text: c.pedidos + (Number(c.pedidos) === 1 ? " pedido" : " pedidos") + " · " + c.puntos + " puntos · registrado el " + (c.creado_en ? fecha(c.creado_en) : "") })]));
+      });
+    }
+    q.addEventListener("input", paint); paint();
+    card.appendChild(el("div", { class: "row2" }, [el("label", {}, ["Buscar", q]), el("div", { style: "align-self:end;margin-bottom:14px" }, [dl])]));
+    card.appendChild(list); return card;
   }
 
   /* ---------- Pedidos ---------- */

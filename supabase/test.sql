@@ -54,3 +54,12 @@ reset role;
 set role authenticated; set request.jwt.sub = '00000000-0000-0000-0000-00000000000a';
 select total from public.crear_pedido(1, 'programado', (now() at time zone 'America/Bogota')::date + 2, 2::smallint);
 reset role;
+
+\echo '--- clientes: solo admin puede listar'
+set role authenticated; set request.jwt.sub = '00000000-0000-0000-0000-00000000000a';
+select * from public.admin_clientes();
+reset role;
+set role authenticated; set request.jwt.sub = '00000000-0000-0000-0000-0000000000ad';
+select email, nombre, pedidos, puntos from public.admin_clientes() order by email;
+reset role;
+set role anon; select * from public.admin_clientes(); reset role;
