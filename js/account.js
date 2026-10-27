@@ -52,7 +52,28 @@
     }).catch(function () {});
   }
   function complete() { var p = S.profile; return !!(p && p.nombre && p.telefono && p.direccion && p.localidad_id && p.acepta_datos_at); }
-  function refresh() { return loadUser().then(function () { paintNav(); paintDelivery(); if (isOpen()) paintModal(); }); }
+  function refresh() { return loadUser().then(function () { paintNav(); paintRewards(); paintDelivery(); if (isOpen()) paintModal(); }); }
+
+  /* ---------- Invitación a registrarse (sección Huevos) ---------- */
+  function paintRewards() {
+    var box = $("rewards"); if (!box) return;
+    box.hidden = false;
+    var t = $("rewardsTitle"), x = $("rewardsText"), b = $("rewardsBtn");
+    if (!S.session) {
+      t.textContent = "Regístrate gratis y gana puntos";
+      x.textContent = ""; x.appendChild(document.createTextNode("Con tu cuenta guardamos tus datos para pedir más rápido, y "));
+      x.appendChild(el("b", { text: "cada cubeta que pidas te suma 5 puntos" })); x.appendChild(document.createTextNode(". Con tus puntos podrás ganar premios de la finca."));
+      b.hidden = false; b.textContent = "Crear mi cuenta gratis";
+    } else if (!complete()) {
+      t.textContent = "Ya casi: completa tus datos";
+      x.textContent = "Llénalos una sola vez y tus próximos pedidos serán muy rápidos. Cada cubeta te suma 5 puntos para ganar premios.";
+      b.hidden = false; b.textContent = "Completar mis datos";
+    } else {
+      t.textContent = "Tienes " + S.puntos + (S.puntos === 1 ? " punto" : " puntos");
+      x.textContent = "Cada cubeta que te entregamos suma 5 puntos. Sigue pidiendo para ganar premios de la finca.";
+      b.hidden = true;
+    }
+  }
 
   /* ---------- Botón del menú ---------- */
   function paintNav() {
@@ -284,6 +305,7 @@
 
   /* ---------- Arranque ---------- */
   APP.onChange = function (lines) { S.lines = lines; var d = $("quickDone"); if (d && lines.length) d.remove(); paintDelivery(); };
+  var rb = $("rewardsBtn"); if (rb) rb.addEventListener("click", openModal);
   var acct = $("acctBtn"); if (acct) { acct.hidden = false; acct.addEventListener("click", openModal); }
   var wa = $("quickWa"); if (wa) wa.addEventListener("click", submit);
   sb.auth.onAuthStateChange(function (ev) { if (ev === "SIGNED_IN" || ev === "SIGNED_OUT" || ev === "TOKEN_REFRESHED") setTimeout(refresh, 0); });

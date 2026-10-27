@@ -76,3 +76,12 @@
 .acct__tabpane[hidden] { display: none; }
 .acct__st { display: inline-block; margin-top: .25rem; padding: .2rem .7rem; border-radius: 999px; font: 700 .95rem var(--sans); background: #eee3cf; color: var(--earth); justify-self: start; }
 .acct__st.is-entregado { background: #dff3e6; color: #17603a; } .acct__st.is-cancelado { background: #fbe1da; color: #8f2a15; } .acct__st.is-confirmado { background: #fff4d6; color: #7a5200; }
+
+/* Invitación a registrarse */
+.rewards { display: flex; gap: 1rem; align-items: flex-start; max-width: 640px; margin: 1.4rem 0 .4rem; padding: 1.2rem; border-radius: 22px; background: #fff4d6; border: 2px solid var(--gold); }
+.rewards[hidden] { display: none; }
+.rewards__badge { flex: none; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: var(--ink); font-size: 1.9rem; }
+.rewards h3 { font: 400 1.6rem/1.2 var(--serif); color: var(--ink); margin: 0 0 .4rem; }
+.rewards p { font: 400 1.15rem/1.5 var(--sans); color: rgba(43, 29, 20, .88); margin: 0 0 .9rem; }
+.rewards .btn { width: 100%; }
+@media (max-width: 420px) { .rewards { flex-direction: column; } }
