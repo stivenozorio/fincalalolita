@@ -59,6 +59,9 @@
     var b = $("acctBtn"); if (!b) return;
     b.textContent = S.session ? "Mi cuenta" : "Entrar";
     b.setAttribute("aria-label", S.session ? "Mi cuenta: mis datos, pedidos y puntos" : "Entrar o crear mi cuenta");
+    var a = $("adminLink"), isAdmin = !!(S.profile && S.profile.rol === "admin");
+    if (isAdmin && !a) { a = el("a", { class: "nav__admin", id: "adminLink", href: "admin/", "aria-label": "Panel de administración" }, [el("span", { class: "l-long", text: "Panel de administración" }), el("span", { class: "l-short", text: "Panel admin" })]); b.parentNode.insertBefore(a, b); }
+    if (a) a.hidden = !isAdmin;
   }
 
   /* ---------- Ventana "Mi cuenta" ---------- */
@@ -115,6 +118,7 @@
 
   function paintProfile() {
     var p = S.profile || {};
+    if (p.rol === "admin") body.appendChild(el("a", { class: "acct__admin", href: "admin/", text: "Ir al panel de administración" }));
     body.appendChild(el("h2", { text: complete() ? "Hola, " + p.nombre.split(" ")[0] : "Completa tus datos" }));
     body.appendChild(el("p", { class: "acct__email", text: "Cuenta: " + S.session.user.email }));
     if (!complete()) body.appendChild(el("p", { class: "acct__lead", text: "Solo se llena una vez. Después pedir es tan fácil como elegir cuántas cubetas." }));
@@ -156,7 +160,6 @@
       body.appendChild(ul);
     }
     var links = el("div", { class: "acct__links" });
-    if (p.rol === "admin") links.appendChild(el("a", { class: "acct__ghost", href: "admin/", text: "Panel de administración" }));
     links.appendChild(el("button", { class: "acct__ghost", type: "button", text: "Cerrar sesión", onclick: function () { sb.auth.signOut().then(function () { closeModal(); return refresh(); }); } }));
     body.appendChild(links);
   }
