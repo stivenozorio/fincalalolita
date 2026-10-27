@@ -154,6 +154,17 @@
     if (lines.some(function (l) { return CAT.products.some(function (p) { return p.id === l.productId && p.provisional; }); })) url = null;
     var wa = $("waLink"), off = $("waDisabled");
     if (url) { wa.href = url; wa.hidden = false; off.hidden = true; } else { wa.removeAttribute("href"); wa.hidden = true; off.hidden = false; }
+    var quick = $("quick");
+    if (quick) {
+      quick.hidden = count === 0;
+      if (count > 0) {
+        var sum = $("quickSum"); sum.textContent = "";
+        var what = document.createElement("span"); what.textContent = "Tu pedido: " + lines.map(function (l) { return l.qty + " × " + l.name + (l.presentation && !/por confirmar/i.test(l.presentation) ? " (" + l.presentation + ")" : ""); }).join(" · ");
+        var tot = document.createElement("b"); tot.textContent = t !== null ? "Total: " + O.formatCOP(t) : "Total: lo confirma Dagoberto";
+        sum.appendChild(what); sum.appendChild(tot);
+        var qa = $("quickWa"); if (url) { qa.href = url; qa.hidden = false; } else { qa.removeAttribute("href"); qa.hidden = true; }
+      }
+    }
     $("orderFine").textContent = !numberOk ? I.t("noWa") : I.t("fine");
     if (numberOk && url) $("orderFine").textContent = I.t("fine");
   }

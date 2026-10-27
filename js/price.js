@@ -14,99 +14,90 @@
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
   function svg(tag, attrs) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
 
+  var MESES_L = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  function dateDay(iso) { var p = parts(iso); return p ? p.d + " de " + MESES_L[p.mo] + " de " + p.y : ""; }
+  function timeOf(iso) { var p = parts(iso); return p ? (p.h % 12 || 12) + ":" + p.mi + (p.h < 12 ? " a. m." : " p. m.") : ""; }
+
   var DIR = {
-    up:    { arrow: "▲", word: "Sube",   cls: "is-up" },
-    down:  { arrow: "▼", word: "Baja",   cls: "is-down" },
-    same:  { arrow: "=", word: "Sin cambios", cls: "is-same" },
-    first: { arrow: "●", word: "Precio de referencia", cls: "is-first" }
+    up:    { arrow: "▲", word: "SUBIÓ",       verb: "Subió",   cls: "is-up" },
+    down:  { arrow: "▼", word: "BAJÓ",        verb: "Bajó",    cls: "is-down" },
+    same:  { arrow: "＝", word: "SIGUE IGUAL", verb: "Igual",   cls: "is-same" },
+    first: { arrow: "●", word: "PRECIO DE HOY", verb: "Precio inicial", cls: "is-first" }
   };
 
-  function variationText(c) {
-    if (c.direction === "first") return "Aún no hay cambios registrados.";
-    if (c.direction === "same") return "Igual que el precio anterior.";
-    return signed(c.delta) + " (" + pct(c.pct) + ") frente al precio anterior";
-  }
-
   function chart(history) {
-    var W = 640, H = 240, L = 62, R = 18, T = 20, B = 40;
-    var pts = history.slice(-24);
+    var W = 480, H = 270, L = 74, R = 22, T = 34, B = 46;
+    var pts = history.slice(-12);
     var prices = pts.map(function (e) { return e.price; });
     var lo = Math.min.apply(null, prices), hi = Math.max.apply(null, prices);
-    var pad = Math.max(500, (hi - lo) * 0.25); lo = Math.max(0, lo - pad); hi = hi + pad;
-    var x = function (i) { return pts.length === 1 ? (L + (W - R)) / 2 : L + (W - L - R) * i / (pts.length - 1); };
+    var pad = Math.max(1000, (hi - lo) * 0.3); lo = Math.max(0, lo - pad); hi = hi + pad;
+    var x = function (i) { return pts.length === 1 ? (L + W - R) / 2 : L + (W - L - R) * i / (pts.length - 1); };
     var y = function (v) { return T + (H - T - B) * (1 - (v - lo) / (hi - lo)); };
-    var s = svg("svg", { viewBox: "0 0 " + W + " " + H, class: "pchart__svg", role: "img", "aria-label": "Gráfico del precio de la cubeta en el tiempo" });
-    for (var g = 0; g <= 3; g++) {
-      var gv = lo + (hi - lo) * g / 3, gy = y(gv);
+    var s = svg("svg", { viewBox: "0 0 " + W + " " + H, class: "pchart__svg", role: "img", "aria-label": "Gráfico del precio de la cubeta. Cada punto es un precio; verde sube, rojo baja." });
+    for (var g = 0; g <= 2; g++) {
+      var gv = lo + (hi - lo) * g / 2, gy = y(gv);
       s.appendChild(svg("line", { x1: L, x2: W - R, y1: gy, y2: gy, class: "pchart__grid" }));
-      var lab = svg("text", { x: L - 8, y: gy + 4, class: "pchart__ytick", "text-anchor": "end" }); lab.textContent = cop(Math.round(gv / 100) * 100); s.appendChild(lab);
+      var lab = svg("text", { x: L - 10, y: gy + 5, class: "pchart__ytick", "text-anchor": "end" }); lab.textContent = cop(Math.round(gv / 500) * 500); s.appendChild(lab);
     }
     var d = pts.map(function (e, i) { return (i ? "L" : "M") + x(i).toFixed(1) + " " + y(e.price).toFixed(1); }).join(" ");
-    if (pts.length > 1) {
-      s.appendChild(svg("path", { d: d + " L" + x(pts.length - 1).toFixed(1) + " " + (H - B) + " L" + x(0).toFixed(1) + " " + (H - B) + " Z", class: "pchart__area" }));
-      s.appendChild(svg("path", { d: d, class: "pchart__line" }));
-    }
-    var step = Math.max(1, Math.ceil(pts.length / 6));
+    if (pts.length > 1) { s.appendChild(svg("path", { d: d, class: "pchart__line" })); }
+    var step = Math.max(1, Math.ceil(pts.length / 4));
     pts.forEach(function (e, i) {
-      var dir = DIR[e.direction] || DIR.same;
-      var dot = svg("circle", { cx: x(i).toFixed(1), cy: y(e.price).toFixed(1), r: i === pts.length - 1 ? 7 : 5, class: "pchart__dot " + dir.cls });
-      var tip = svg("title", {}); tip.textContent = dateLong(e.at) + " · " + cop(e.price) + (e.direction === "first" ? "" : " · " + dir.word.toLowerCase() + " " + variationText(e)); dot.appendChild(tip);
-      s.appendChild(dot);
-      if (i % step === 0 || i === pts.length - 1) {
-        var xl = svg("text", { x: x(i).toFixed(1), y: H - 14, class: "pchart__xtick", "text-anchor": pts.length === 1 ? "middle" : (i === 0 ? "start" : i === pts.length - 1 ? "end" : "middle") });
+      var dir = DIR[e.direction] || DIR.same, last = i === pts.length - 1;
+      var dot = svg("circle", { cx: x(i).toFixed(1), cy: y(e.price).toFixed(1), r: last ? 11 : 8, class: "pchart__dot " + dir.cls });
+      var tip = svg("title", {}); tip.textContent = dateLong(e.at) + " · " + cop(e.price) + " · " + dir.verb; dot.appendChild(tip); s.appendChild(dot);
+      if (last) {
+        var v = svg("text", { x: Math.min(x(i), W - R - 30).toFixed(1), y: (y(e.price) - 20).toFixed(1), class: "pchart__now", "text-anchor": "middle" }); v.textContent = cop(e.price); s.appendChild(v);
+      }
+      if (i % step === 0 || last) {
+        var xl = svg("text", { x: x(i).toFixed(1), y: H - 14, class: "pchart__xtick", "text-anchor": pts.length === 1 ? "middle" : (i === 0 ? "start" : last ? "end" : "middle") });
         xl.textContent = dateShort(e.at, i ? pts[i - 1].at : null); s.appendChild(xl);
       }
     });
     return s;
   }
 
-  function historyTable(history) {
-    var box = el("div", "phist"); var table = el("table", "phist__table");
-    table.appendChild(el("caption", "sr-only", "Historial de precios de la cubeta"));
-    var head = el("tr"); ["Fecha", "Precio", "Variación", "%"].forEach(function (h) { head.appendChild(el("th", "", h)).setAttribute("scope", "col"); });
-    var thead = el("thead"); thead.appendChild(head); table.appendChild(thead);
-    var tb = el("tbody");
+  function historyList(history) {
+    var ul = el("ul", "phist");
     history.slice().reverse().forEach(function (e) {
-      var dir = DIR[e.direction] || DIR.same, tr = el("tr");
-      tr.appendChild(el("td", "", dateLong(e.at)));
-      tr.appendChild(el("td", "", cop(e.price)));
-      var v = el("td", "pv " + dir.cls, e.direction === "first" ? "—" : dir.arrow + " " + signed(e.delta)); tr.appendChild(v);
-      tr.appendChild(el("td", "pv " + dir.cls, e.direction === "first" ? "—" : pct(e.pct)));
-      tb.appendChild(tr);
+      var dir = DIR[e.direction] || DIR.same, li = el("li", "phist__row " + dir.cls);
+      var when = el("span", "phist__when"); when.appendChild(el("b", "", dateDay(e.at))); when.appendChild(el("small", "", timeOf(e.at))); li.appendChild(when);
+      li.appendChild(el("span", "phist__price", cop(e.price)));
+      li.appendChild(el("span", "phist__chg", e.direction === "first" ? "Precio inicial" : e.direction === "same" ? "＝ Igual" : dir.arrow + " " + dir.verb + " " + cop(e.delta) + " (" + pct(Math.abs(e.pct)) + ")"));
+      ul.appendChild(li);
     });
-    table.appendChild(tb); box.appendChild(table); return box;
+    return ul;
   }
 
-  /** Dibuja la tarjeta completa dentro de `root`. opts.history = mostrar la tabla del historial. */
+  /** Dibuja la tarjeta completa dentro de `root`. */
   function render(root, data, opts) {
     opts = opts || {};
-    var c = data.current, dir = DIR[c.direction] || DIR.same;
+    var c = data.current, dir = DIR[c.direction] || DIR.same, moved = c.direction === "up" || c.direction === "down";
     root.textContent = "";
-    var top = el("div", "pcard__top");
-    var main = el("div", "pcard__main");
-    main.appendChild(el("p", "pcard__label", "Precio de la cubeta de huevos"));
-    var big = el("p", "pcard__price"); big.appendChild(el("span", "", cop(c.price))); big.appendChild(el("small", "", " COP · por cubeta")); main.appendChild(big);
-    main.appendChild(el("p", "pcard__date", "Actualizado el " + dateLong(c.at)));
-    top.appendChild(main);
-    var badge = el("div", "pbadge " + dir.cls);
-    badge.appendChild(el("span", "pbadge__arrow", dir.arrow)); badge.setAttribute("aria-hidden", "true");
-    top.appendChild(badge);
-    root.appendChild(top);
-    var moved = c.direction === "up" || c.direction === "down";
-    var line = el("p", "pcard__var " + dir.cls);
-    line.appendChild(el("b", "", moved ? dir.word + ": " : dir.word + ". "));
-    line.appendChild(document.createTextNode(variationText(c)));
-    root.appendChild(line);
+    root.appendChild(el("p", "pcard__label", "Precio de hoy · cubeta de huevos"));
+    var big = el("p", "pcard__price"); big.appendChild(el("span", "", cop(c.price))); big.appendChild(el("small", "", "por cada cubeta")); root.appendChild(big);
+
+    var st = el("div", "pstate " + dir.cls);
+    st.appendChild(el("span", "pstate__arrow", dir.arrow));
+    var tx = el("div", "pstate__text"); tx.appendChild(el("b", "", dir.word));
+    if (moved) { tx.appendChild(el("span", "", "Antes costaba " + cop(c.price - c.delta) + ". Ahora cuesta " + cop(c.price) + ".")); tx.appendChild(el("span", "pstate__diff", dir.verb + " " + cop(c.delta) + " (" + pct(Math.abs(c.pct)) + ")")); }
+    else if (c.direction === "same") { tx.appendChild(el("span", "", "El precio no cambió frente al anterior.")); }
+    else { tx.appendChild(el("span", "", "Cuando el precio cambie, aquí verás si subió o bajó y cuánto.")); }
+    st.appendChild(tx); root.appendChild(st);
+
+    root.appendChild(el("p", "pcard__date", "Última actualización: " + dateDay(c.at) + ", " + timeOf(c.at)));
+
+    root.appendChild(el("h3", "pcard__sub", "Así ha cambiado el precio"));
     var wrap = el("div", "pchart"); wrap.appendChild(chart(data.history)); root.appendChild(wrap);
     var leg = el("p", "pchart__legend");
-    [["is-up", "Sube"], ["is-down", "Baja"], ["is-same", "Igual"]].forEach(function (l) { var s = el("span", l[0], l[1]); leg.appendChild(s); });
+    [["is-up", "▲ Subió"], ["is-down", "▼ Bajó"], ["is-same", "＝ Igual"]].forEach(function (l) { leg.appendChild(el("span", l[0], l[1])); });
     root.appendChild(leg);
-    if (data.count > 1 || opts.history) {
+    if (data.count > 1) {
       var det = el("details", "pdet"); if (opts.open) det.open = true;
-      det.appendChild(el("summary", "", "Ver historial de precios (" + data.count + ")"));
-      det.appendChild(historyTable(data.history)); root.appendChild(det);
+      det.appendChild(el("summary", "", "Ver todos los precios anteriores (" + data.count + ")"));
+      det.appendChild(historyList(data.history)); root.appendChild(det);
     }
-    root.appendChild(el("p", "pcard__note", "El precio de la cubeta puede variar. Dagoberto lo actualiza cuando cambia y siempre confirma el valor final al recibir tu pedido."));
+    root.appendChild(el("p", "pcard__note", "El precio puede cambiar. Dagoberto siempre te confirma el valor final por WhatsApp."));
   }
 
   function load(url) {

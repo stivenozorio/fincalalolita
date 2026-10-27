@@ -31,3 +31,53 @@
 .price .pcard__note:last-child { max-width: 52ch; }
 .btn--dark { background: var(--ink); color: var(--cream); }
 .btn--dark:hover { background: var(--earth); }
+
+/* ===== Versión grande y clara (clientes mayores) ===== */
+.shop--eggs .body, .price .body { font-size: 1.2rem; line-height: 1.6; max-width: 38em; }
+.easy { display: grid; gap: .9rem; margin: 1.6rem 0 2rem; max-width: 640px; counter-reset: s; }
+.easy li { display: flex; align-items: center; gap: 1rem; font: 400 1.2rem/1.4 var(--sans); color: var(--ink); background: var(--cream); border: 1px solid var(--line-light); border-radius: 18px; padding: .95rem 1.1rem; }
+.easy b { font-weight: 700; }
+.easy__n { flex: none; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--earth); color: #fff; font: 700 1.4rem var(--sans); }
+.shop--eggs .prod h3 { font-size: 2.1rem; }
+.shop--eggs .prod__desc { font-size: 1.1rem; line-height: 1.55; color: rgba(43, 29, 20, .82); }
+.shop--eggs .pres { flex-wrap: wrap; padding-top: 1.1rem; gap: 1rem; }
+.shop--eggs .pres__info { font-size: 1.15rem; }
+.shop--eggs .pres__info span { font-weight: 600; color: var(--ink); }
+.shop--eggs .pres__info b { font-size: 2rem; font-family: var(--serif); font-weight: 500; }
+.shop--eggs .qty { padding: 6px; gap: .5rem; border: 2px solid var(--earth); background: #fff; }
+.shop--eggs .qty button { width: 62px; height: 62px; font-size: 2rem; background: var(--cream); }
+.shop--eggs .qty output { min-width: 2.2ch; font: 700 1.9rem var(--sans); }
+.quick { margin-top: 1.6rem; max-width: 640px; padding: 1.3rem; border-radius: 22px; background: #e9f6ee; border: 2px solid var(--wa); }
+.quick__sum { display: grid; gap: .35rem; font: 500 1.15rem/1.4 var(--sans); color: var(--ink); margin-bottom: 1rem; }
+.quick__sum b { font: 600 1.9rem var(--serif); color: #17603a; }
+.quick__fine { margin-top: .8rem; font: 400 1rem/1.4 var(--sans); color: rgba(43, 29, 20, .75); }
+.btn--xl { min-height: 64px; font-size: 1.2rem; padding: 0 2rem; }
+.btn--xl.btn--wa { width: 100%; }
+
+.pcard { max-width: 640px; padding: clamp(20px, 4vw, 32px); }
+.pcard__label { font-size: .95rem; letter-spacing: .08em; }
+.pcard__price { margin-top: .4rem; font-size: clamp(3.4rem, 14vw, 5rem); }
+.pcard__price small { font-size: 1.2rem; margin-top: .2rem; letter-spacing: 0; color: rgba(43, 29, 20, .75); }
+.pstate { display: flex; align-items: center; gap: 1rem; margin-top: 1.2rem; padding: 1rem 1.1rem; border-radius: 18px; color: #fff; background: var(--same); }
+.pstate.is-up { background: var(--up); } .pstate.is-down { background: var(--down); } .pstate.is-first { background: var(--earth); }
+.pstate__arrow { flex: none; font-size: 2.6rem; line-height: 1; }
+.pstate__text { display: grid; gap: .2rem; font: 400 1.1rem/1.35 var(--sans); }
+.pstate__text b { font: 800 1.7rem/1.1 var(--sans); letter-spacing: .02em; }
+.pstate__diff { font-weight: 700; font-size: 1.2rem; }
+.pcard__date { margin-top: .9rem; font: 500 1.05rem/1.4 var(--sans); color: rgba(43, 29, 20, .8); }
+.pcard__sub { margin-top: 1.6rem; font: 400 1.5rem var(--serif); color: var(--ink); }
+.pchart { margin-top: .7rem; }
+.pchart__ytick, .pchart__xtick { font-size: 15px; fill: rgba(43, 29, 20, .8); }
+.pchart__now { font: 700 18px var(--sans); fill: var(--ink); }
+.pchart__line { stroke-width: 3.5; }
+.pchart__legend { font-size: 1.05rem; gap: 1.2rem; flex-wrap: wrap; }
+.pchart__legend span::before { content: none; }
+.pdet summary { font-size: 1.15rem; padding: .8rem 0; }
+.phist { display: grid; gap: .6rem; margin-top: .4rem; }
+.phist__row { display: grid; grid-template-columns: 1fr auto; gap: .2rem .8rem; padding: .8rem 1rem; background: var(--paper); border: 1px solid var(--line-light); border-radius: 14px; font: 500 1.05rem/1.35 var(--sans); }
+.phist__when { display: grid; } .phist__when small { color: rgba(43, 29, 20, .7); font-size: .95rem; }
+.phist__price { font: 600 1.4rem var(--serif); text-align: right; }
+.phist__chg { grid-column: 1 / -1; font-weight: 700; }
+.phist__row.is-up .phist__chg { color: var(--up); } .phist__row.is-down .phist__chg { color: var(--down); } .phist__row.is-same .phist__chg, .phist__row.is-first .phist__chg { color: rgba(43, 29, 20, .7); }
+.pcard__note { font-size: 1rem; color: rgba(43, 29, 20, .75); }
+@media 
