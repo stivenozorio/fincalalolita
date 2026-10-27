@@ -85,3 +85,10 @@
 .rewards p { font: 400 1.15rem/1.5 var(--sans); color: rgba(43, 29, 20, .88); margin: 0 0 .9rem; }
 .rewards .btn { width: 100%; }
 @media (max-width: 420px) { .rewards { flex-direction: column; } }
+
+.nav__avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; margin-right: .5rem; vertical-align: middle; }
+.nav__acct { display: inline-flex; align-items: center; }
+.acct__head { display: flex; align-items: center; gap: .9rem; margin: 0 0 .5rem; }
+.acct__avatar { flex: none; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
+.acct__head h2 { margin: 0 3rem 0 0; }
+@media (max-width: 380px) { .nav__avatar { display: none; } }

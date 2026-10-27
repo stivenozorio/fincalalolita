@@ -37,6 +37,15 @@
   function fechaLarga(iso) { var p = iso.split("-"); return Number(p[2]) + " de " + MESES[Number(p[1]) - 1]; }
   function hoyDisponible() { return true; }               // se puede pedir las 24 horas
 
+  /* Datos que entrega Google al registrarse (solo nombre, correo y foto) */
+  function gdata() {
+    var m = (S.session && S.session.user && S.session.user.user_metadata) || {};
+    var name = String(m.full_name || m.name || "").replace(/\s+/g, " ").trim().slice(0, 80);
+    var pic = String(m.avatar_url || m.picture || ""); if (!/^https:\/\//.test(pic)) pic = "";
+    return { name: name, pic: pic };
+  }
+  function avatar(cls) { var g = gdata(); return g.pic ? el("img", { class: cls, src: g.pic, alt: "", width: "36", height: "36", referrerpolicy: "no-referrer" }) : null; }
+
   /* ---------- Sesión y perfil ---------- */
   function loadUser() {
     return sb.auth.getSession().then(function (r) {
@@ -77,7 +86,8 @@
   /* ---------- Botón del menú ---------- */
   function paintNav() {
     var b = $("acctBtn"); if (!b) return;
-    b.textContent = S.session ? "Mi cuenta" : "Entrar";
+    b.textContent = ""; var av = S.session ? avatar("nav__avatar") : null; if (av) b.appendChild(av);
+    b.appendChild(document.createTextNode(S.session ? "Mi cuenta" : "Entrar"));
     b.setAttribute("aria-label", S.session ? "Mi cuenta: mis datos, pedidos y puntos" : "Entrar o crear mi cuenta");
     var a = $("adminLink"), isAdmin = !!(S.profile && S.profile.rol === "admin");
     if (isAdmin && !a) { a = el("a", { class: "nav__admin", id: "adminLink", href: "admin/", "aria-label": "Panel de administración" }, [el("span", { class: "l-long", text: "Panel de administración" }), el("span", { class: "l-short", text: "Panel admin" })]); b.parentNode.insertBefore(a, b); }
@@ -139,12 +149,15 @@
   function paintProfile() {
     var p = S.profile || {};
     if (p.rol === "admin") body.appendChild(el("a", { class: "acct__admin", href: "admin/", text: "Ir al panel de administración" }));
-    body.appendChild(el("h2", { text: complete() ? "Hola, " + p.nombre.split(" ")[0] : "Completa tus datos" }));
+    var g = gdata(), shown = p.nombre || g.name, head = el("div", { class: "acct__head" });
+    var av = avatar("acct__avatar"); if (av) head.appendChild(av);
+    head.appendChild(el("h2", { text: complete() ? "Hola, " + shown.split(" ")[0] : (shown ? "Hola, " + shown.split(" ")[0] + ". Completa tus datos" : "Completa tus datos") }));
+    body.appendChild(head);
     body.appendChild(el("p", { class: "acct__email", text: "Cuenta: " + S.session.user.email }));
     if (!complete()) body.appendChild(el("p", { class: "acct__lead", text: "Solo se llena una vez. Después pedir es tan fácil como elegir cuántas cubetas." }));
     else body.appendChild(el("div", { class: "acct__points" }, [el("b", { text: String(S.puntos) }), el("span", { text: " puntos acumulados · 5 puntos por cada cubeta entregada" })]));
 
-    var nombre = el("input", { type: "text", required: true, autocomplete: "name", maxlength: "80", value: p.nombre || "" });
+    var nombre = el("input", { type: "text", required: true, autocomplete: "name", maxlength: "80", value: p.nombre || g.name || "" });
     var tel = el("input", { type: "tel", required: true, autocomplete: "tel", inputmode: "tel", maxlength: "20", value: p.telefono || "", placeholder: "3001234567" });
     var dir = el("input", { type: "text", required: true, autocomplete: "street-address", maxlength: "160", value: p.direccion || "", placeholder: "Calle 80 # 20-30, apto 301" });
     var loc = el("select", { required: true }, [el("option", { value: "", text: "Elige tu localidad" })].concat(S.locs.map(function (l) { return el("option", { value: String(l.id), text: l.nombre, selected: p.localidad_id === l.id }); })));

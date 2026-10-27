@@ -64,7 +64,10 @@ $$;
 create or replace function public.crear_perfil_nuevo() returns trigger
 language plpgsql security definer set search_path = public as $$
 begin
-  insert into public.perfiles (id) values (new.id) on conflict (id) do nothing;
+  -- Si entra con Google, guardamos su nombre desde el principio (el resto lo completa el cliente).
+  insert into public.perfiles (id, nombre)
+  values (new.id, nullif(left(trim(coalesce(new.raw_user_meta_data ->> 'full_name', new.raw_user_meta_data ->> 'name', '')), 80), ''))
+  on conflict (id) do nothing;
   return new;
 end $$;
 drop trigger if exists al_crear_usuario on auth.users;
