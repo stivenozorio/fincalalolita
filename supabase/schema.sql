@@ -126,21 +126,41 @@ create table if not exists public.puntos (
   creado_en timestamptz not null default now()
 );
 
--- Suma los puntos cuando el pedido pasa a "entregado" (una sola vez).
+-- Puntos de un pedido: se llevan como libro de movimientos (+ al entregar, − si deja de estar entregado).
+-- El saldo de un pedido solo puede ser 0 o el total de sus cubetas, así que cambiar el estado muchas veces nunca duplica puntos.
 create or replace function public.dar_puntos_al_entregar() returns trigger
 language plpgsql security definer set search_path = public as $$
-declare por_cubeta integer;
+declare por_cubeta integer; neto integer;
 begin
-  if new.estado = 'entregado' and not new.puntos_otorgados then
-    select valor::integer into por_cubeta from public.ajustes where clave = 'puntos_por_cubeta';
-    insert into public.puntos (usuario_id, pedido_id, puntos, motivo)
-    values (new.usuario_id, new.id, new.cubetas * coalesce(por_cubeta, 5), 'Pedido entregado');
+  if new.estado is not distinct from old.estado then return new; end if;
+  select coalesce(sum(puntos), 0) into neto from public.puntos where pedido_id = new.id;
+  if new.estado = 'entregado' then
+    if neto = 0 then
+      select valor::integer into por_cubeta from public.ajustes where clave = 'puntos_por_cubeta';
+      insert into public.puntos (usuario_id, pedido_id, puntos, motivo)
+      values (new.usuario_id, new.id, new.cubetas * coalesce(por_cubeta, 5), 'Pedido entregado');
+    end if;
     new.puntos_otorgados := true;
+  elsif old.estado = 'entregado' then
+    if neto <> 0 then
+      insert into public.puntos (usuario_id, pedido_id, puntos, motivo)
+      values (new.usuario_id, new.id, -neto, 'Se quitan los puntos: el pedido pasó a ' || new.estado);
+    end if;
+    new.puntos_otorgados := false;
   end if;
   return new;
 end $$;
 drop trigger if exists al_entregar on public.pedidos;
 create trigger al_entregar before update on public.pedidos for each row execute function public.dar_puntos_al_entregar();
+
+-- Corrección única de datos antiguos: pedidos que ya no están entregados pero conservan puntos.
+insert into public.puntos (usuario_id, pedido_id, puntos, motivo)
+select o.usuario_id, o.id, -sum(x.puntos), 'Se quitan los puntos: el pedido pasó a ' || o.estado
+from public.pedidos o join public.puntos x on x.pedido_id = o.id
+where o.estado <> 'entregado'
+group by o.id, o.usuario_id, o.estado
+having sum(x.puntos) <> 0;
+update public.pedidos set puntos_otorgados = false where estado <> 'entregado' and puntos_otorgados;
 
 create or replace function public.saldo_puntos() returns integer
 language sql stable security definer set search_path = public as $$

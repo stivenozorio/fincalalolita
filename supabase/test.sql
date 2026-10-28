@@ -63,3 +63,21 @@ set role authenticated; set request.jwt.sub = '00000000-0000-0000-0000-000000000
 select email, nombre, pedidos, puntos from public.admin_clientes() order by email;
 reset role;
 set role anon; select * from public.admin_clientes(); reset role;
+
+\echo '--- puntos: cambiar el estado muchas veces nunca duplica ni deja puntos de un pedido cancelado'
+update public.perfiles set nombre='Admin', telefono='3', direccion='x', localidad_id=10 where id = '00000000-0000-0000-0000-0000000000ad';
+set role authenticated; set request.jwt.sub = '00000000-0000-0000-0000-0000000000ad';
+select public.crear_pedido(3, 'programado', (now() at time zone 'America/Bogota')::date + 3, 1::smallint) is not null as pedido_creado;
+reset role;
+select max(id) as pid from public.pedidos where usuario_id = '00000000-0000-0000-0000-0000000000ad' \gset
+\echo '(saldo del admin tras cada cambio; esperado: 15, 0, 15, 15, 0, 15, 0)'
+set role authenticated; set request.jwt.sub = '00000000-0000-0000-0000-0000000000ad';
+update public.pedidos set estado='entregado' where id = :pid; select public.saldo_puntos();
+update public.pedidos set estado='cancelado' where id = :pid; select public.saldo_puntos();
+update public.pedidos set estado='entregado' where id = :pid; select public.saldo_puntos();
+update public.pedidos set estado='entregado' where id = :pid; select public.saldo_puntos();
+update public.pedidos set estado='confirmado' where id = :pid; select public.saldo_puntos();
+update public.pedidos set estado='entregado' where id = :pid; select public.saldo_puntos();
+update public.pedidos set estado='cancelado' where id = :pid; select public.saldo_puntos();
+reset role;
+select motivo, puntos from public.puntos where pedido_id = :pid order by id;

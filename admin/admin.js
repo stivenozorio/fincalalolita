@@ -170,7 +170,7 @@
 
   /* ---------- Pedidos ---------- */
   function vPedidos(D) {
-    var card = el("div", { class: "ad__card" }, [el("h2", { text: "Pedidos recientes" }), el("p", { class: "ad__lead", text: "Cuando entregues un pedido, márcalo “Entregado”: así el cliente recibe sus puntos." })]);
+    var card = el("div", { class: "ad__card" }, [el("h2", { text: "Pedidos recientes" }), el("p", { class: "ad__lead", text: "Cuando entregues un pedido, márcalo “Entregado”: así el cliente recibe sus puntos. Si después lo cambias a otro estado (por ejemplo “Cancelado”), los puntos se le quitan solos, y nunca se suman dos veces." })]);
     if (!D.pedidos.length) card.appendChild(el("p", { text: "Todavía no hay pedidos." }));
     var ES = [["nuevo", "Nuevo"], ["confirmado", "Confirmado"], ["entregado", "Entregado"], ["cancelado", "Cancelado"]], loc = {}; D.locs.forEach(function (l) { loc[l.id] = l.nombre; });
     var fr = {}; D.franjas.forEach(function (f) { fr[f.id] = f.nombre; });
